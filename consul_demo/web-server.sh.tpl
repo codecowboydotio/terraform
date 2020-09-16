@@ -29,6 +29,8 @@ unzip /root/consul_1.8.3_linux_amd64.zip -d /root/
 mkdir -p /etc/consul.d
 echo "./consul agent -config-dir=/etc/consul.d -data-dir=/tmp -join ${consul_address}" > /root/consul.sh
 chmod 755 /root/consul.sh
+git clone https://github.com/platzhersh/pacman-canvas /var/www/html/
+mv /var/www/html/index.htm /var/www/html/index.html
 cat << EOF > /etc/consul.d/web.json
 {
   "service": {

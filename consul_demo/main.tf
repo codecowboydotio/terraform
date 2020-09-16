@@ -38,12 +38,11 @@ resource "aws_instance" "consul-server" {
   }
 }
 
-    
 
 data "template_file" "web-init" {
   template = "${file("web-server.sh.tpl")}"
   vars = {
-    consul_address = "${aws_instance.consul-server.private_ip}",
+    consul_address = aws_instance.consul-server.private_ip
   }
 }
 
@@ -53,6 +52,7 @@ resource "aws_instance" "web-server" {
   subnet_id = var.subnet_id
   key_name = var.key_name
   user_data = data.template_file.web-init.rendered
+  #count = 5
 
   tags = { 
     Name = "svk_web_server"
