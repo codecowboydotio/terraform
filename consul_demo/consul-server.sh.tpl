@@ -25,7 +25,9 @@ dnf -y install ${pkg}
 %{ endfor ~}
 curl https://releases.hashicorp.com/consul/1.8.3/consul_1.8.3_linux_amd64.zip -o /root/consul_1.8.3_linux_amd64.zip
 unzip /root/consul_1.8.3_linux_amd64.zip -d /root/
+cp -p /root/consul /usr/bin
 mkdir -p /etc/consul.d
+curl https://raw.githubusercontent.com/codecowboydotio/terraform/main/consul_demo/files/consul.service -o /usr/lib/systemd/system/consul.service
 cat << EOF > /etc/consul.d/consul.json
 {
   "bootstrap": true,
@@ -40,8 +42,4 @@ cat << EOF > /etc/consul.d/consul.json
   "ui": true
 }
 EOF
-cat << EOF > /root/consul.sh
-./consul agent -config-dir=/etc/consul.d
-EOF
-chmod 755 /root/consul.sh
 logger -p local0.info 'firstrun debug: finished-config'
