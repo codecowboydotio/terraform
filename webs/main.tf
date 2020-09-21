@@ -16,7 +16,7 @@ resource "aws_instance" "web-server" {
   subnet_id = var.subnet_id
   key_name = var.key_name
   user_data = data.template_file.web-init.rendered
-  count=10
+  count=13
 
   tags = { 
     Name = "svk_web_server"
@@ -27,7 +27,7 @@ resource "aws_instance" "web-server" {
   }
 
   provisioner "local-exec" {
-    command = "sleep 5"
+    command = "sleep 22"
   }
 }
 
