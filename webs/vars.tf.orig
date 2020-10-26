@@ -19,3 +19,6 @@ variable "linux_server_pkgs" {
 variable "consul_address" {
   default = "your-consul-server-ip-address"
 }
+variable "instance_count" {
+  default = "1"
+}

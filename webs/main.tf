@@ -16,7 +16,7 @@ resource "aws_instance" "web-server" {
   subnet_id = var.subnet_id
   key_name = var.key_name
   user_data = data.template_file.web-init.rendered
-  count=13
+  count=var.instance_count
 
   tags = { 
     Name = "svk_web_server"
