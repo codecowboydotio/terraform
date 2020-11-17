@@ -1,0 +1,24 @@
+variable "aws_region" {
+  default = "ap-southeast-2"
+}
+variable "subnet_id" {
+  default =  "subnet-00d6dc3b42d57fa0d"
+}
+variable "key_name" {
+  default = "svk-keypair-f5"
+}
+variable "ami_linux_server" {
+  default = "ami-001ccfbcf4a8e0814"
+}
+variable "instance_type_linux_server" {
+  default = "t2.micro"
+}
+variable "linux_server_pkgs" {
+  default = ["httpd", "net-tools", "unzip"]
+}
+variable "consul_address" {
+  default = "3.104.74.79"
+}
+variable "instance_count" {
+  default = "10"
+}

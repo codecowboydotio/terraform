@@ -1,0 +1,27 @@
+variable "aws_region" {
+  default = ""
+}
+variable "subnet_id" {
+  default =  ""
+}
+variable "key_name" {
+  default = ""
+}
+variable "ami_linux_server" {
+  default = "ami-0987943c813a8426b"
+}
+variable "ami_web_server" {
+  default = "ami-001ccfbcf4a8e0814"
+}
+variable "instance_type_linux_server" {
+  default = "t2.micro"
+}
+variable "linux_server_pkgs" {
+  default = ["net-tools", "unzip"]
+}
+variable "instance_count" {
+  default = "1"
+}
+variable "ssh_user" {
+  default = "ubuntu"
+}
