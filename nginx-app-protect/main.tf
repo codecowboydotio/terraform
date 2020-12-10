@@ -1,5 +1,5 @@
 data "template_file" "nginx-init" {
-  template = "${file("nginx-server.sh.tpl")}"
+  template = file("nginx-server.sh.tpl")
 }
 
 resource "aws_instance" "nginx-server" {
@@ -9,18 +9,20 @@ resource "aws_instance" "nginx-server" {
   key_name = var.key_name
   user_data = data.template_file.nginx-init.rendered
   #instance_initiated_shutdown_behavior = terminate
-  count=var.instance_count
 
   tags = {
     for k, v in merge({
       app_type = "nginx"
+      Name = "svk-nginx"
     },
     var.default_ec2_tags): k => v
   }
 
-
   provisioner "local-exec" {
-    command = "sleep 2"
+    command = "echo ${aws_instance.nginx-server.private_ip} > files/nginx_internal_ip.txt"
+  }
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.nginx-server.public_ip} > files/nginx_external_ip.txt"
   }
 
   provisioner "file" {
@@ -30,7 +32,7 @@ resource "aws_instance" "nginx-server" {
     connection {
       type     = "ssh"
       user     = var.ssh_user
-      private_key = file("~/aws-keyfile.pem")
+      private_key = file(var.ssh_key_location)
       host     = self.public_ip
     }
   }
@@ -39,5 +41,5 @@ resource "aws_instance" "nginx-server" {
 }
 
 output "nginx_server_ip" {
-  value = "${aws_instance.nginx-server.*.public_ip}"
+  value = aws_instance.nginx-server.*.public_ip
 }

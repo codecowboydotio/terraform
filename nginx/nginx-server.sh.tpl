@@ -1,11 +1,5 @@
 #!/bin/bash
 
-: '
-Copyright 2019 F5 Networks Inc.
-This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
-If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
-'
-
 FILE=/tmp/firstrun.log
 if [ ! -e $FILE ]
 then
@@ -20,39 +14,19 @@ exec 1<>$FILE
 exec 2>&1
 echo "firstrun debug: starting-config"
 logger -p local0.info 'firstrun debug: starting--config'
-dnf -y install httpd
-dnf -y install unzip
-dnf -y install net-tools
-curl https://releases.hashicorp.com/consul/1.8.3/consul_1.8.3_linux_amd64.zip -o /root/consul_1.8.3_linux_amd64.zip
-unzip /root/consul_1.8.3_linux_amd64.zip -d /root/
-mkdir -p /etc/consul.d
-mkdir -p /var/log/consul
-cp -p /root/consul /usr/bin
-echo "consul agent -config-dir=/etc/consul.d -log-file=/var/log/consul/consul.log -data-dir=/tmp -join ${consul_address}" > /root/consul.sh
-chmod 755 /root/consul.sh
-git clone https://github.com/platzhersh/pacman-canvas /var/www/html/
-mv /var/www/html/index.htm /var/www/html/index.html
-cat << EOF > /etc/consul.d/web.json
-{
-  "service": {
-    "name": "web",
-    "tags": [
-      "webapp"
-    ],
-    "port": 80,
-    "check": {
-      "id": "service_check",
-      "name": "Check httpd health",
-      "service_id": "web_1",
-      "http": "http://localhost/",
-      "method": "GET",
-      "interval": "10s",
-      "timeout": "1s"
-    }
-  }
-}
-EOF
-/root/consul.sh &
-systemctl start httpd
+mkdir /etc/ssl/nginx
+mv /tmp/nginx-repo* /etc/ssl/nginx
+sudo wget https://nginx.org/keys/nginx_signing.key
+sudo apt-key add nginx_signing.key
+sudo apt-get install apt-transport-https lsb-release ca-certificates
+printf "deb https://plus-pkgs.nginx.com/ubuntu `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-plus.list
+sudo wget -q -O /etc/apt/apt.conf.d/90nginx https://cs.nginx.com/static/files/90nginx
+sudo apt-get update
+sudo apt-get install -y nginx-plus
+git clone https://github.com/platzhersh/pacman-canvas 
+cp /tmp/nginx-hex.svg /pacman-canvas/img/blinky.svg
+cp /tmp/nginx-hex.svg /pacman-canvas/img/clyde.svg
+cp /tmp/nginx-hex.svg /pacman-canvas/img/inky.svg
+cp /tmp/nginx-hex.svg /pacman-canvas/img/pinky.svg
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'

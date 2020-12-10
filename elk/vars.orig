@@ -1,0 +1,52 @@
+variable "aws_region" {
+  default = "ap-southeast-2"
+}
+variable "subnet_id" {
+  default =  "subnet-00d6dc3b42d57fa0d"
+}
+variable "key_name" {
+  default = "svk-keypair-f5"
+}
+variable "ami_ubuntu_server" {
+  default = "ami-0987943c813a8426b"
+}
+variable "instance_type_linux_server" {
+  default = "t2.large"
+}
+variable "instance_count" {
+  default = "1"
+}
+variable "ssh_user" {
+  default = "ubuntu"
+}
+variable "ssh_key_location" {
+  default = "~/aws-keyfile.pem"
+}
+variable "aws_vpc_id" {
+  default = "vpc-01a744c6d00fa3741"
+}
+variable "aws_subnet_mgmt" {
+  default = "10.200.5.0/24"
+}
+variable "aws_subnet_outside" {
+  default = "10.200.6.0/24"
+}
+variable "aws_subnet_client_1" {
+  default = "10.200.7.0/24"
+}
+variable "aws_subnet_client_2" {
+  default = "10.200.8.0/24"
+}
+variable "bigip_license" {
+  default = "ZFEZV-LTSCR-MBZBP-NWTDD-QRUMFFI"
+}
+variable "bigip_password" {
+  default = "password"
+}
+variable "instance_type_bigip" {
+  default = "m4.2xlarge"
+}
+variable "ami_bigip" {
+  default = "ami-012acc5cdab881a3b"
+}
+

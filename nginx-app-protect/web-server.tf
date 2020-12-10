@@ -1,5 +1,5 @@
 data "template_file" "web-init" {
-  template = "${file("web-server.sh.tpl")}"
+  template = file("web-server.sh.tpl")
 }
 
 resource "aws_instance" "web-server" {
@@ -12,6 +12,7 @@ resource "aws_instance" "web-server" {
   tags = {
     for k, v in merge({
       app_type = "web-server"
+      Name = "svk-web-server"
     },
     var.default_ec2_tags): k => v
   }
@@ -19,9 +20,12 @@ resource "aws_instance" "web-server" {
   provisioner "local-exec" {
     command = "echo ${aws_instance.web-server.private_ip} > files/web_internal_ip.txt"
   }
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.web-server.public_ip} > files/web_external_ip.txt"
+  }
 }
 
 
 output "web_server_ip" {
-  value = "${aws_instance.web-server.*.public_ip}"
+  value = aws_instance.web-server.*.public_ip
 }
