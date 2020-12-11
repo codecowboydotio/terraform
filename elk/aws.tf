@@ -3,6 +3,19 @@ provider "aws" {
   region  = var.aws_region
 }
 
+data "aws_vpcs" "default" {
+  tags = {
+    Name = var.vpc_name
+  }
+}
+
+data "aws_security_groups" "default" {
+  filter {
+    name = "vpc-id"
+    values = data.aws_vpcs.default.ids
+  }
+}
+
 resource "aws_subnet" "client1" {
   vpc_id     = var.aws_vpc_id
   cidr_block = var.aws_subnet_client_1
@@ -40,6 +53,22 @@ resource "aws_subnet" "outside" {
 
   tags = {
     Name = "svk-tf-outside-subnet"
+  }
+}
+
+resource "aws_eip" "outside" {
+  vpc = true
+
+  tags = {
+    Name = "svk-eip-outside-tf"
+  }
+}
+
+resource "aws_eip" "mgmt" {
+  vpc = true
+
+  tags = {
+    Name = "svk-eip-mgmt-tf"
   }
 }
 
