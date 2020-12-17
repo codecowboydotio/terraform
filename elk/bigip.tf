@@ -40,7 +40,8 @@ resource "aws_instance" "bigip" {
   key_name = var.key_name
   user_data = templatefile("bigip.sh.tpl", {
      bigip_password = var.bigip_password,
-     bigip_license = var.bigip_license
+     bigip_license = var.bigip_license,
+     bigip_port = var.bigip_port
   })
 
   network_interface {
@@ -85,12 +86,21 @@ resource "aws_eip_association" "mgmt" {
   depends_on = [aws_eip.mgmt, aws_instance.bigip]
 }
 
-output "bigip_public_ip" {
-  value = aws_instance.bigip.*.public_ip
+output "aws_eip_mgmt" {
+  value =  aws_eip.mgmt.public_ip
 }
-output "default_vpc_id" { 
-  value = data.aws_vpcs.default.ids
+output "bigip_outside_external" {
+  value = aws_eip.outside.public_ip
 }
-output "aws_security_group" {
-  value = data.aws_security_groups.default.ids
+output "bigip_mgmt_internal" {
+  value = aws_network_interface.aws_subnet_mgmt.private_ip
+}
+output "bigip_outside_internal" {
+  value = aws_network_interface.aws_subnet_outside.private_ip
+}
+output "bigip_client_1_internal" {
+  value = aws_network_interface.aws_subnet_client_1.private_ip
+}
+output "bigip_client_2_internal" {
+  value = aws_network_interface.aws_subnet_client_2.private_ip
 }

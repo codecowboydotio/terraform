@@ -1,0 +1,73 @@
+- name: Base VE config
+  hosts: localhost
+#  connection: local
+  gather_facts: False
+
+  vars:
+    bigip_provider:
+      server: 13.237.104.186
+      user: admin
+      password: password
+      validate_certs: no
+    ntp_var: [1.1.1.1, 2.2.2.2, 3.3.3.3]
+    vlan_1: client_1
+    vlan_2: client_2
+    vlan_3: outside
+    vlan_1_mask: 255.255.255.0
+    vlan_2_mask: 255.255.255.0
+    vlan_3_mask: 255.255.255.0
+    vlan_1_ip: 10.200.7.208
+    vlan_2_ip: 10.200.8.207
+    vlan_3_ip: 10.200.6.180
+    default_outside_route_gw: 10.200.6.1
+
+  tasks:
+  - name: Add 1.1 as untagged interface for client_1 VLAN
+    bigip_vlan:
+        untagged_interface: 1.1
+        name: "{{ vlan_1 }}"
+        provider: "{{ bigip_provider }}"
+  - name: Add 1.2 as untagged interface for client_2 VLAN
+    bigip_vlan:
+        untagged_interface: 1.2
+        name: "{{ vlan_2 }}"
+        provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Add 1.3 as untagged interface for outside VLAN
+    bigip_vlan:
+        untagged_interface: 1.3
+        name: "{{ vlan_3 }}"
+        provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Create Self IP client_1
+    bigip_selfip:
+      address: "{{ vlan_1_ip }}"
+      name: "{{ vlan_1 }}"
+      netmask: "{{ vlan_1_mask }}"
+      vlan: "{{ vlan_1 }}"
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Create Self IP client_2
+    bigip_selfip:
+      address: "{{ vlan_2_ip }}"
+      name: "{{ vlan_2 }}"
+      netmask: "{{ vlan_2_mask }}"
+      vlan: "{{ vlan_2 }}"
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Create Self IP outside
+    bigip_selfip:
+      address: "{{ vlan_3_ip }}"
+      name: "{{ vlan_3 }}"
+      netmask: "{{ vlan_3_mask }}"
+      vlan: "{{ vlan_3 }}"
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Configure default route for outside interface
+    bigip_static_route:
+      destination: 0.0.0.0
+      netmask: 255.255.255.255
+      gateway_address: "{{ default_outside_route_gw }}"
+      name: default-to-outside
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost

@@ -24,6 +24,7 @@ sudo apt-get install -y ansible
 echo "get gitlab repo"
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
 GITLAB_IP=$(cat /tmp/gitlab_internal_ip.txt)
+NGINX_IP=$(cat /tmp/nginx_internal_ip.txt)
 echo $GITLAB_IP
 sudo EXTERNAL_URL="http://$GITLAB_IP" GITLAB_ROOT_PASSWORD="password" apt-get install gitlab-ee
 sudo gitlab-rails console <<EOF
@@ -32,7 +33,9 @@ EOF
 cat << EOF > /etc/ansible/hosts
 [f5cs]
 localhost
+[nginx]
 EOF
+echo $NGINX_IP >> /etc/ansible/hosts
 echo "create token for root"
 sudo gitlab-rails runner "token = User.find_by_username('root').personal_access_tokens.create(scopes: [:read_user, :api, :read_api, :sudo, :read_repository, :write_repository], name: 'Automation token'); token.set_token('token-string-here123'); token.save!"
 echo "use API to create demo user (uses root token created above)"
@@ -49,8 +52,9 @@ cd demo_project/
 cp -p ../f5cs/eap.sh .
 cp -p ../f5cs/eap.template .
 cp -p ../f5cs/f5cs-dnslb.yml .
+cp -p ../f5cs/update_blocking.sh .
 cp -p /tmp/.gitlab-ci.yml .
-git add eap.sh eap.template f5cs-dnslb.yml .gitlab-ci.yml
+git add eap.sh eap.template f5cs-dnslb.yml update_blocking.sh .gitlab-ci.yml
 git commit -a -m "initial commit"
 git push http://demo:12345678@localhost/demo/demo_project
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
