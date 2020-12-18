@@ -29,28 +29,31 @@ variable "aws_subnet_mgmt" {
   default = "10.200.5.0/24"
 }
 variable "aws_subnet_mgmt_name" {
-  default = "svk-subnet-mgmt-tf"
+  default = "subnet-mgmt-tf"
 }
 variable "aws_subnet_outside" {
   default = "10.200.6.0/24"
 }
 variable "aws_subnet_outside_name" {
-  default = "svk-subnet-outside-tf"
+  default = "subnet-outside-tf"
 }
 variable "aws_subnet_client_1" {
   default = "10.200.7.0/24"
 }
 variable "aws_subnet_client_1_name" {
-  default = "svk-subnet-client-1-tf"
+  default = "subnet-client-1-tf"
 }
 variable "aws_subnet_client_2" {
   default = "10.200.8.0/24"
 }
 variable "aws_subnet_client_2_name" {
-  default = "svk-subnet-client-2-tf"
+  default = "subnet-client-2-tf"
 }
 variable "bigip_license" {
   default = ""
+}
+variable "bigip_port" {
+  default = "443"
 }
 variable "bigip_password" {
   default = ""
@@ -62,5 +65,5 @@ variable "ami_bigip" {
   default = "ami-012acc5cdab881a3b"
 }
 variable "vpc_name" {
-  default = ""
+  default = "vpc"
 }

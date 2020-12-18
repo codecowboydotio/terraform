@@ -69,6 +69,19 @@ resource "aws_instance" "bigip" {
     var.default_ec2_tags): k => v
   }
 
+  provisioner "local-exec" {
+    command = "sed -i s'/10.200.6.x/${aws_network_interface.aws_subnet_outside.private_ip}/g' files/f5-configure.yml"
+  }
+  provisioner "local-exec" {
+    command = "sed -i s'/10.200.7.x/${aws_network_interface.aws_subnet_client_1.private_ip}/g' files/f5-configure.yml"
+  }
+  provisioner "local-exec" {
+    command = "sed -i s'/10.200.8.x/${aws_network_interface.aws_subnet_client_2.private_ip}/g' files/f5-configure.yml"
+  }
+  provisioner "local-exec" {
+    command = "sed -i s'/xxxserverxxx/${aws_eip.mgmt.public_ip}/g' files/f5-configure.yml"
+  }
+
   depends_on = [aws_subnet.mgmt, aws_subnet.client1, aws_network_interface.aws_subnet_client_1, aws_network_interface.aws_subnet_client_2]
 }
 

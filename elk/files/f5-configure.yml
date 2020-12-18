@@ -5,7 +5,7 @@
 
   vars:
     bigip_provider:
-      server: 13.237.104.186
+      server: 54.253.158.113
       user: admin
       password: password
       validate_certs: no
@@ -16,9 +16,9 @@
     vlan_1_mask: 255.255.255.0
     vlan_2_mask: 255.255.255.0
     vlan_3_mask: 255.255.255.0
-    vlan_1_ip: 10.200.7.208
-    vlan_2_ip: 10.200.8.207
-    vlan_3_ip: 10.200.6.180
+    vlan_1_ip: 10.200.7.22
+    vlan_2_ip: 10.200.8.69
+    vlan_3_ip: 10.200.6.103
     default_outside_route_gw: 10.200.6.1
 
   tasks:
@@ -45,6 +45,7 @@
       name: "{{ vlan_1 }}"
       netmask: "{{ vlan_1_mask }}"
       vlan: "{{ vlan_1 }}"
+      allow_service: all
       provider: "{{ bigip_provider }}"
     delegate_to: localhost
   - name: Create Self IP client_2
@@ -53,6 +54,7 @@
       name: "{{ vlan_2 }}"
       netmask: "{{ vlan_2_mask }}"
       vlan: "{{ vlan_2 }}"
+      allow_service: all
       provider: "{{ bigip_provider }}"
     delegate_to: localhost
   - name: Create Self IP outside
@@ -62,6 +64,7 @@
       netmask: "{{ vlan_3_mask }}"
       vlan: "{{ vlan_3 }}"
       provider: "{{ bigip_provider }}"
+      allow_service: all
     delegate_to: localhost
   - name: Configure default route for outside interface
     bigip_static_route:
