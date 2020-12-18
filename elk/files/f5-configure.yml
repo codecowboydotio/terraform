@@ -5,7 +5,7 @@
 
   vars:
     bigip_provider:
-      server: 54.253.158.113
+      server: xxxserverxxx
       user: admin
       password: password
       validate_certs: no
@@ -16,9 +16,9 @@
     vlan_1_mask: 255.255.255.0
     vlan_2_mask: 255.255.255.0
     vlan_3_mask: 255.255.255.0
-    vlan_1_ip: 10.200.7.22
-    vlan_2_ip: 10.200.8.69
-    vlan_3_ip: 10.200.6.103
+    vlan_1_ip: 10.200.7.x
+    vlan_2_ip: 10.200.8.x
+    vlan_3_ip: 10.200.6.x
     default_outside_route_gw: 10.200.6.1
 
   tasks:
