@@ -81,6 +81,9 @@ resource "aws_instance" "bigip" {
   provisioner "local-exec" {
     command = "sed -i s'/xxxserverxxx/${aws_eip.mgmt.public_ip}/g' files/f5-configure.yml"
   }
+  provisioner "local-exec" {
+    command = "sed -i s'/xxxelkpublicipxxx/${aws_instance.elk.private_ip}/g' files/f5-configure.yml"
+  }
 
   depends_on = [aws_subnet.mgmt, aws_subnet.client1, aws_network_interface.aws_subnet_client_1, aws_network_interface.aws_subnet_client_2]
 }

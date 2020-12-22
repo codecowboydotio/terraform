@@ -121,4 +121,8 @@ curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-T
 DATA="{\"operation\":\"INSTALL\",\"packageFilePath\":\"/var/config/rest/downloads/$FN\"}"
 curl -kvu $CREDS "https://$IP/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
 
+#provision CGNAT
+tmsh modify sys provision cgnat level nominal
+tmsh save sys config
+
 logger -p local0.info 'firstrun debug: finished-config'

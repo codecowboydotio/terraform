@@ -72,6 +72,14 @@ resource "aws_eip" "mgmt" {
   }
 }
 
+resource "aws_eip" "client1_mgmt" {
+  vpc = true
+
+  tags = {
+    Name = "svk-eip-client1-mgmt-tf"
+  }
+}
+
 output "subnets" {
   value = aws_subnet.outside.*.id
 }

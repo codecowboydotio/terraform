@@ -5,7 +5,7 @@
 
   vars:
     bigip_provider:
-      server: xxxserverxxx
+      server: 13.54.187.255
       user: admin
       password: password
       validate_certs: no
@@ -16,10 +16,16 @@
     vlan_1_mask: 255.255.255.0
     vlan_2_mask: 255.255.255.0
     vlan_3_mask: 255.255.255.0
-    vlan_1_ip: 10.200.7.x
-    vlan_2_ip: 10.200.8.x
-    vlan_3_ip: 10.200.6.x
+    vlan_1_ip: 10.200.7.233
+    vlan_2_ip: 10.200.8.98
+    vlan_3_ip: 10.200.6.9
     default_outside_route_gw: 10.200.6.1
+    hsl_log_dest: hsl-elk-dest
+    bigip_pool: hsl-elk-pool
+    bigip_pool_member: 10.200.5.200
+    bigip_pool_member_port: 5000
+
+    
 
   tasks:
   - name: Add 1.1 as untagged interface for client_1 VLAN
@@ -72,5 +78,40 @@
       netmask: 255.255.255.255
       gateway_address: "{{ default_outside_route_gw }}"
       name: default-to-outside
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Create pool
+    bigip_pool:
+      state: present
+      name: "{{ bigip_pool }}"
+      partition: Common
+      lb_method: least-connections-member
+      slow_ramp_time: 220
+      monitors:
+        - tcp
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Add pool member
+    bigip_pool_member:
+      state: present
+      pool: "{{ bigip_pool }}"
+      partition: Common
+      host: "{{ bigip_pool_member }}"
+      port: "{{ bigip_pool_member_port }}"
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Create a high-speed logging destination
+    bigip_log_destination:
+      name: "{{ hsl_log_dest }}"
+      type: remote-high-speed-log
+      pool: "{{ bigip_pool }}"
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: Create a log publisher for use in high speed logging
+    bigip_log_publisher:
+      name: publisher1
+      destinations:
+        - "{{ hsl_log_dest }}"
+      state: present
       provider: "{{ bigip_provider }}"
     delegate_to: localhost

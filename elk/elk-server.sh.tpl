@@ -40,5 +40,26 @@ echo "server.port: 5601" >> /etc/kibana/kibana.yml
 echo "elasticsearch.hosts: [\"http://localhost:9200\"]" >> /etc/kibana/kibana.yml
 echo "server.host: \"0.0.0.0\"" >> /etc/kibana/kibana.yml
 service kibana start
+cat << EOF > /etc/logstash/conf.d/logstash-syslog.conf
+input {
+  tcp {
+    port => 5000
+    type => syslog
+  }
+  udp {
+    port => 5000
+    type => syslog
+  }
+}
+
+filter {
+}
+
+output {
+  elasticsearch { hosts => ["localhost:9200"] }
+  stdout { codec => rubydebug }
+}
+EOF
+systemctl start logstash
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'
