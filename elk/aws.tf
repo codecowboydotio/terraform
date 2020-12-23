@@ -1,5 +1,4 @@
 provider "aws" {
-#  profile = "default"
   region  = var.aws_region
 }
 
@@ -24,6 +23,24 @@ resource "aws_subnet" "client1" {
   tags = {
     Name = "svk-tf-client-subnet-1"
   }
+}
+
+resource "aws_route_table" "client1" {
+  vpc_id = var.aws_vpc_id
+  route {
+    cidr_block = "0.0.0.0/0"
+    network_interface_id =  aws_network_interface.aws_subnet_client_1.id
+  }
+  tags = { 
+    Name = "svk-client1-route-table-tf"
+  }
+
+  depends_on = [aws_network_interface.aws_subnet_client_1, aws_instance.client_1]
+}
+
+resource "aws_route_table_association" "client1" {
+  subnet_id = aws_subnet.client1.id
+  route_table_id = aws_route_table.client1.id
 }
 
 resource "aws_subnet" "client2" {
@@ -78,8 +95,4 @@ resource "aws_eip" "client1_mgmt" {
   tags = {
     Name = "svk-eip-client1-mgmt-tf"
   }
-}
-
-output "subnets" {
-  value = aws_subnet.outside.*.id
 }

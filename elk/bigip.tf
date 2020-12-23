@@ -1,6 +1,7 @@
 resource "aws_network_interface" "aws_subnet_client_1" {
   subnet_id        = aws_subnet.client1.id
   security_groups = data.aws_security_groups.default.ids
+  source_dest_check = false
 
   tags = {
     Name = var.aws_subnet_client_1_name
@@ -10,6 +11,7 @@ resource "aws_network_interface" "aws_subnet_client_1" {
 resource "aws_network_interface" "aws_subnet_client_2" {
   subnet_id        = aws_subnet.client2.id
   security_groups = data.aws_security_groups.default.ids
+  source_dest_check = false
 
   tags = {
     Name = var.aws_subnet_client_2_name
@@ -102,7 +104,7 @@ resource "aws_eip_association" "mgmt" {
   depends_on = [aws_eip.mgmt, aws_instance.bigip]
 }
 
-output "aws_eip_mgmt" {
+output "bigip_outside_mgmt" {
   value =  aws_eip.mgmt.public_ip
 }
 output "bigip_outside_external" {
