@@ -23,10 +23,38 @@ printf "deb https://plus-pkgs.nginx.com/ubuntu `lsb_release -cs` nginx-plus\n" |
 sudo wget -q -O /etc/apt/apt.conf.d/90nginx https://cs.nginx.com/static/files/90nginx
 sudo apt-get update
 sudo apt-get install -y nginx-plus
-git clone https://github.com/platzhersh/pacman-canvas 
-cp /tmp/nginx-hex.svg /pacman-canvas/img/blinky.svg
-cp /tmp/nginx-hex.svg /pacman-canvas/img/clyde.svg
-cp /tmp/nginx-hex.svg /pacman-canvas/img/inky.svg
-cp /tmp/nginx-hex.svg /pacman-canvas/img/pinky.svg
+cat << EOF > /etc/nginx/nginx.conf
+user  nginx;
+worker_processes  auto;
+
+error_log  /var/log/nginx/error.log notice;
+pid        /var/run/nginx.pid;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+
+        log_format  main  '\$remote_addr [\$time_local] "\$request" '
+                      '\$status \$body_bytes_sent "\$http_referer" "\$http_user_agent"';
+
+        upstream api_server {
+            server ${SERVER_IP};
+        }
+
+        server {
+            listen 80;
+
+            add_header 'Access-Control-Allow-Origin' '*' always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+
+            location / {
+                  proxy_pass http://api_server;
+            }
+        }
+}
+EOF
+nginx
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'

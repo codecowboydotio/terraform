@@ -10,7 +10,8 @@ resource "aws_instance" "svk" {
   key_name = var.key_name
   user_data = templatefile("user_data.sh.tpl", {
      bigip_password = var.bigip_password,
-     bigip_license = var.bigip_license
+     bigip_license = var.bigip_license,
+     bigip_port = var.bigip_port
   })
 
 
@@ -20,9 +21,10 @@ resource "aws_instance" "svk" {
   }
 }
 
+
 output "public_ip" {
-  value = "${aws_instance.svk.*.public_ip}"
+  value = aws_instance.svk.*.public_ip
 }
 output "tags" {
-  value = "${aws_instance.svk.*.tags}"
+  value = aws_instance.svk.*.tags
 }

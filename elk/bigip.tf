@@ -72,6 +72,9 @@ resource "aws_instance" "bigip" {
   }
 
   provisioner "local-exec" {
+    command = "cp -p files/f5-configure.template files/f5-configure.yml"
+  }
+  provisioner "local-exec" {
     command = "sed -i s'/10.200.6.x/${aws_network_interface.aws_subnet_outside.private_ip}/g' files/f5-configure.yml"
   }
   provisioner "local-exec" {
@@ -85,6 +88,9 @@ resource "aws_instance" "bigip" {
   }
   provisioner "local-exec" {
     command = "sed -i s'/xxxelkpublicipxxx/${aws_instance.elk.private_ip}/g' files/f5-configure.yml"
+  }
+  provisioner "local-exec" {
+    command = "sed -i s'/xxxclient_1_ipxxx/${aws_instance.client_1.private_ip}/g' files/f5-configure.yml"
   }
 
   depends_on = [aws_subnet.mgmt, aws_subnet.client1, aws_network_interface.aws_subnet_client_1, aws_network_interface.aws_subnet_client_2]
@@ -104,7 +110,7 @@ resource "aws_eip_association" "mgmt" {
   depends_on = [aws_eip.mgmt, aws_instance.bigip]
 }
 
-output "bigip_outside_mgmt" {
+output "bigip_mgmt_outside" {
   value =  aws_eip.mgmt.public_ip
 }
 output "bigip_outside_external" {

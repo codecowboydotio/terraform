@@ -24,7 +24,7 @@
     bigip_pool: hsl-elk-pool
     bigip_pool_member: xxxelkpublicipxxx
     bigip_pool_member_port: 5000
-    client_1_private_ip: 10.200.7.72
+    client_1_private_ip: xxxclient_1_ipxxx
     ssh_pool: ssh_pool
     bigip_virtual_name: inbound_ssh_vs
 
