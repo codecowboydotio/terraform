@@ -53,6 +53,11 @@ input {
 }
 
 filter {
+  grok {
+    match => {
+      "message" => "(\"%%{DATA:f5_cgnat_type}\")?\"%%{DATA:f5_cgnat_client_src}:%%{DATA:f5_cgnat_client_port}\"\"%%{DATA:f5_cgnat_proto}\"\"%%{DATA:f5_cgnat_outbound_ip}:%%{DATA:f5_cgnat_outbound_port}\""
+    }
+  }
 }
 
 output {

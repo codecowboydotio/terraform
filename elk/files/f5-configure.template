@@ -27,6 +27,7 @@
     client_1_private_ip: xxxclient_1_ipxxx
     ssh_pool: ssh_pool
     bigip_virtual_name: inbound_ssh_vs
+    bigip_virtual_cgnat_name: cgnat_napt
 
     
 
@@ -144,10 +145,19 @@
       partition: Common
       name: "{{ bigip_virtual_name }}"
       destination: "{{ vlan_3_ip }}"
-      port: 22
+      port: 2201
       pool: "{{ ssh_pool }}"
       snat: Automap
       description: SSH Inbound Virtual Server
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: create LSN pool
+    bigip_command:
+      commands:
+        - create ltm lsn-pool lsn_pool egress-interfaces add { outside } egress-interfaces-enabled log-profile lsn_log_profile log-publisher publisher1 members add { "{{ vlan_3_ip }}"/32 } mode napt
+        - create ltm virtual "{{ bigip_virtual_cgnat_name }}" destination 0.0.0.0:any mask any source-address-translation { pool lsn_pool type lsn } translate-address disabled translate-port disabled vlans add { client_1 } vlans-enabled vlans add { client_1 }
+        - modify sys db cgnat.lsnlegacyeditor value true
+        - modify ltm lsn-log-profile lsn_log_profile start-outbound-session { action enabled }
       provider: "{{ bigip_provider }}"
     delegate_to: localhost
 

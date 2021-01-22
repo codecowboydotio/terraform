@@ -22,5 +22,7 @@ network:
             gateway4: ${gateway}
     version: 2
 EOF
+rm /etc/resolv.conf
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
 netplan apply
 echo "finished first run"

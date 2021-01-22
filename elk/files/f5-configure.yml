@@ -5,7 +5,7 @@
 
   vars:
     bigip_provider:
-      server: 54.206.128.233
+      server: 54.206.182.238
       user: admin
       password: password
       validate_certs: no
@@ -16,17 +16,18 @@
     vlan_1_mask: 255.255.255.0
     vlan_2_mask: 255.255.255.0
     vlan_3_mask: 255.255.255.0
-    vlan_1_ip: 10.200.7.128
-    vlan_2_ip: 10.200.8.137
-    vlan_3_ip: 10.200.6.192
+    vlan_1_ip: 10.200.7.200
+    vlan_2_ip: 10.200.8.100
+    vlan_3_ip: 10.200.6.103
     default_outside_route_gw: 10.200.6.1
     hsl_log_dest: hsl-elk-dest
     bigip_pool: hsl-elk-pool
-    bigip_pool_member: 10.200.5.30
+    bigip_pool_member: 10.200.5.58
     bigip_pool_member_port: 5000
-    client_1_private_ip: 10.200.7.9
+    client_1_private_ip: 10.200.7.159
     ssh_pool: ssh_pool
     bigip_virtual_name: inbound_ssh_vs
+    bigip_virtual_cgnat_name: cgnat_napt
 
     
 
@@ -144,10 +145,19 @@
       partition: Common
       name: "{{ bigip_virtual_name }}"
       destination: "{{ vlan_3_ip }}"
-      port: 22
+      port: 2201
       pool: "{{ ssh_pool }}"
       snat: Automap
       description: SSH Inbound Virtual Server
+      provider: "{{ bigip_provider }}"
+    delegate_to: localhost
+  - name: create LSN pool
+    bigip_command:
+      commands:
+        - create ltm lsn-pool lsn_pool egress-interfaces add { outside } egress-interfaces-enabled log-profile lsn_log_profile log-publisher publisher1 members add { "{{ vlan_3_ip }}"/32 } mode napt
+        - create ltm virtual "{{ bigip_virtual_cgnat_name }}" destination 0.0.0.0:any mask any source-address-translation { pool lsn_pool type lsn } translate-address disabled translate-port disabled vlans add { client_1 } vlans-enabled vlans add { client_1 }
+        - modify sys db cgnat.lsnlegacyeditor value true
+        - modify ltm lsn-log-profile lsn_log_profile start-outbound-session { action enabled }
       provider: "{{ bigip_provider }}"
     delegate_to: localhost
 

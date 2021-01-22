@@ -21,11 +21,11 @@ resource "aws_instance" "elk" {
 }
 
 output "elk_public_ip" {
-  value = aws_instance.elk.*.public_ip
+  value = aws_instance.elk.public_ip
 }
 output "elk_private_ip" {
   value = aws_instance.elk.private_ip
 }
-output "tags" {
-  value = aws_instance.elk.*.tags
-}
+#output "tags" {
+#  value = aws_instance.elk.*.tags
+#}
