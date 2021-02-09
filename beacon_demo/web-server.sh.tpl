@@ -17,11 +17,12 @@ logger -p local0.info 'firstrun debug: starting--config'
 dnf -y install httpd
 dnf -y install unzip
 dnf -y install net-tools
-dnf -y install ansible
+dnf -y install ansible npm nodejs
 systemctl start httpd
 git clone https://github.com/platzhersh/pacman-canvas /var/www/html/
 mv /var/www/html/index.htm /var/www/html/index.html
 git clone https://github.com/codecowboydotio/ansible 
+git clone https://github.com/codecowboydotio/swapi-vue
 ansible-playbook /ansible/telegraf.yml -e 'target_hosts=localhost beacon_access_token=${beacon_access_token}'
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'
