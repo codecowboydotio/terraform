@@ -2,10 +2,10 @@ variable "aws_region" {
   default = "ap-southeast-2"
 }
 variable "subnet_id" {
-  default =  "YOUR AWS SUBNET"
+  default =  "subnet-00d6dc3b42d57fa0d"
 }
 variable "key_name" {
-  default = "YOUR AWS KEY NAME"
+  default = "svk-keypair-f5"
 }
 variable "ami_linux_server" {
   #default = "ami-0f158b0f26f18e619"
@@ -27,8 +27,8 @@ variable "nginx_ssh_user" {
   default = "ubuntu"
 }
 variable "ssh_key_location" {
-  default = "YOURKEY LOCATION"
+  default = "~/aws-keyfile.pem"
 }
 variable "device_id_script_tag" {
-  default = "FULL DEVICEID SCRIPT TAG"
+  default = "<script async defer src=\"https://dip.zeronaught.com/__imp_apg__/js/f5cs-a_aaUBylCrK9-573d9089.js\" id=\"_imp_apg_dip_\"  ></script>"
 }
