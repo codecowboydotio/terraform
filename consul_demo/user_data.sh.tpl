@@ -96,8 +96,8 @@ SOAPLicenseClient  --basekey ${bigip_license}
 checkStatusnoret
 tmsh modify sys global-settings gui-setup disabled
 tmsh modify /sys http auth-pam-validate-ip off
-curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.22.1/f5-appsvcs-3.22.1-1.noarch.rpm -o f5-appsvcs-3.22.1-1.noarch.rpm
-FN=f5-appsvcs-3.22.1-1.noarch.rpm
+curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.26.0/f5-appsvcs-3.26.0-5.noarch.rpm -o f5-appsvcs-3.26.0-5.noarch.rpm
+FN=f5-appsvcs-3.26.0-5.noarch.rpm
 CREDS=admin:admin
 IP="127.0.0.1:8443"
 LEN=$(wc -c $FN | awk 'NR==1{print $1}')

@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 data "template_file" "web-init" {
-  template = "${file("web-server.sh.tpl")}"
+  template = file("web-server.sh.tpl")
   vars = {
     consul_address = var.consul_address
   }
@@ -32,5 +32,5 @@ resource "aws_instance" "web-server" {
 }
 
 output "web_server_ip" {
-  value = "${aws_instance.web-server.*.public_ip}"
+  value = aws_instance.web-server.*.public_ip
 }

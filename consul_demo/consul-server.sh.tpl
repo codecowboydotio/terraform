@@ -24,8 +24,8 @@ logger -p local0.info 'firstrun debug: starting--config'
 %{ for pkg in linux_server_pkgs ~}
 dnf -y install ${pkg}
 %{ endfor ~}
-curl https://releases.hashicorp.com/consul/1.8.3/consul_1.8.3_linux_amd64.zip -o /root/consul_1.8.3_linux_amd64.zip
-unzip /root/consul_1.8.3_linux_amd64.zip -d /root/
+curl https://releases.hashicorp.com/consul/1.9.3/consul_1.9.3_linux_amd64.zip -o /root/consul_1.9.3_linux_amd64.zip
+unzip /root/consul_1.9.3_linux_amd64.zip -d /root/
 cp -p /root/consul /usr/bin
 mkdir -p /etc/consul.d
 mkdir -p /var/log/consul

@@ -13,9 +13,12 @@ resource "aws_instance" "bigip" {
      bigip_license = var.bigip_license 
   })
 
-  tags = { 
-    for k, v in merge(var.default_ec2_tags): 
-      k => v 
+  tags = {
+    for k, v in merge({
+      app_type = "bigip"
+      Name = "svk-bigip"
+    },
+    var.default_ec2_tags): k => v
   }
 }
 
@@ -29,18 +32,18 @@ resource "aws_instance" "consul-server" {
      linux_server_pkgs = var.linux_server_pkgs
   })
 
-  tags = { 
-    Name = "svk_consul_server"
-    Owner = "svk"
-    Environment = "Demo"
-    SupportTeam = "ANZSE"
-    Contact     = "svk@example.com"
+  tags = {
+    for k, v in merge({
+      app_type = "bigip"
+      Name = "svk-consul-server"
+    },
+    var.default_ec2_tags): k => v
   }
 }
 
 
 data "template_file" "web-init" {
-  template = "${file("web-server.sh.tpl")}"
+  template = file("web-server.sh.tpl")
   vars = {
     consul_address = aws_instance.consul-server.private_ip
   }
@@ -52,22 +55,23 @@ resource "aws_instance" "web-server" {
   subnet_id = var.subnet_id
   key_name = var.key_name
   user_data = data.template_file.web-init.rendered
+  count = 4
 
-  tags = { 
-    Name = "svk_web_server"
-    Owner = "svk"
-    Environment = "Demo"
-    SupportTeam = "ANZSE"
-    Contact     = "svk@example.com"
+  tags = {
+    for k, v in merge({
+      app_type = "bigip"
+      Name = "svk-web-server-${count.index}"
+    },
+    var.default_ec2_tags): k => v
   }
 }
 
 output "consul_server_ip" {
-  value = "${aws_instance.consul-server.*.public_ip}"
+  value = aws_instance.consul-server.public_ip
 }
 output "web_server_ip" {
-  value = "${aws_instance.web-server.*.public_ip}"
+  value = aws_instance.web-server.*.public_ip
 }
 output "bigip_ip" {
-  value = "${aws_instance.bigip.*.public_ip}"
+  value = aws_instance.bigip.public_ip
 }
