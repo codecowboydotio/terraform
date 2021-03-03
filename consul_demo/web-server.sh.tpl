@@ -42,6 +42,11 @@ cat << EOF > /etc/consul.d/web.json
       "webapp"
     ],
     "port": 80,
+    "meta": {
+      "VSIP": "${vsip}",
+      "VSPORT": "80",
+      "AS3TMPL": "http"
+    },
     "check": {
       "id": "service_check",
       "name": "Check httpd health",
