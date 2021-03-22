@@ -34,7 +34,7 @@ resource "aws_instance" "consul-server" {
 
   tags = {
     for k, v in merge({
-      app_type = "bigip"
+      app_type = "consul"
       Name = "svk-consul-server"
     },
     var.default_ec2_tags): k => v
@@ -48,6 +48,7 @@ data "template_file" "web-init" {
     consul_address = aws_instance.consul-server.private_ip
     vsip = aws_instance.bigip.private_ip
   }
+  depends_on = [aws_instance.consul-server]
 }
 
 resource "aws_instance" "web-server" {
@@ -60,11 +61,13 @@ resource "aws_instance" "web-server" {
 
   tags = {
     for k, v in merge({
-      app_type = "bigip"
+      app_type = "production"
       Name = "svk-web-server-${count.index}"
     },
     var.default_ec2_tags): k => v
   }
+
+  depends_on = [aws_instance.consul-server]
 }
 
 output "consul_server_ip" {

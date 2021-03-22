@@ -1,14 +1,8 @@
 terraform {
   required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
     bigip = {
       source = "f5networks/bigip"
     }
-#    bigiq = {
-#      source = "f5networks/bigip"
-#    }
     template = {
       source = "hashicorp/template"
     }

@@ -38,13 +38,15 @@ resource "aws_network_interface" "bigiq_net_interface_2" {
 
 
 resource "aws_instance" "bigiq" {
-  ami = "ami-06d3f0e8654855682"
+  ami = "ami-00e7f6524a5382b64"
+  # v7 ami = "ami-06d3f0e8654855682"
   instance_type = "m4.2xlarge"
 #  subnet_id = var.subnet_id
   key_name = var.key_name
+  count = var.bigiq_count
   user_data = templatefile("user_data_bigiq.sh.tpl", {
      bigip_password = var.bigip_password,
-     bigip_license = var.bigip_license
+     bigiq_license = var.bigiq_license
   })
 
   network_interface {

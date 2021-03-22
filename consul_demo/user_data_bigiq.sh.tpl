@@ -90,7 +90,9 @@ tmsh modify /auth password-policy policy-enforcement disabled
 tmsh modify auth user admin { password ${bigip_password} }
 tmsh modify auth user admin shell bash
 tmsh save /sys config
+#SOAPLicenseClient  --basekey MYINF-DQHZAZ-QIE-IBQZZZC-NDIUYJE 
 checkStatusnoret
 tmsh modify sys global-settings gui-setup disabled
 tmsh modify /sys http auth-pam-validate-ip off
+set-basic-auth on
 logger -p local0.info 'firstrun debug: finished-config'
