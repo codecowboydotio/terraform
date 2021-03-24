@@ -4,8 +4,8 @@
 #  password = var.bigip_password
 #  port = var.bigip_port
 #}
-#
-#
+
+
 #resource "bigip_do"  "do-example" {
 #     do_json = file("do-example.json")
 #     timeout = 15
@@ -17,14 +17,14 @@
 #    CONSUL_SERVER = aws_instance.consul-server.public_ip
 #  }
 #}
-#
+
 #resource "bigip_as3" "exampletask" {
 #  as3_json = data.template_file.init.rendered
 #
 #  depends_on = [ aws_instance.bigip ]
 #}
-#
-#
+
+
 #data "template_file" "bigiq" {
 #  template = file("bigiq_as3.tpl")
 #  vars = {

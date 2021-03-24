@@ -8,7 +8,7 @@
                     "class": "Tenant"
               }
     },
-    "targetHost": "10.200.1.94",
+    "targetHost": "${TARGET_HOST}",
     "targetUsername": "admin",
     "targetPassphrase": "admin",
     "bigIqSettings": {
