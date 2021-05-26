@@ -13,8 +13,8 @@
              "defaultRouteDomain": 0,
              "Application_1": {
                  "class": "Application",
-                 "template": "http",
-             "serviceMain": {
+                 "template": "generic",
+             "TESTserviceMain": {
                  "class": "Service_HTTP",
                  "virtualAddresses": [
                      "${VIP_ADDRESS}"

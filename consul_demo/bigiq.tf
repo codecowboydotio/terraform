@@ -44,10 +44,10 @@ resource "aws_instance" "bigiq" {
 #  subnet_id = var.subnet_id
   key_name = var.key_name
   count = var.bigiq_count
-  user_data = templatefile("user_data_bigiq.sh.tpl", {
-     bigip_password = var.bigip_password,
-     bigiq_license = var.bigiq_license
-  })
+#  user_data = templatefile("user_data_bigiq.sh.tpl", {
+#     bigip_password = var.bigip_password,
+#     bigiq_license = var.bigiq_license
+#  })
 
   network_interface {
     device_index = 0

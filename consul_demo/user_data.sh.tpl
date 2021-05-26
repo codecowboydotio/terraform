@@ -90,7 +90,7 @@ tmsh modify /auth password-policy policy-enforcement disabled
 tmsh modify auth user admin { password ${bigip_password} }
 tmsh modify auth user admin shell bash
 tmsh save /sys config
-tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }
+tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'ADMIN PASSWORD HAS BEEN SET' }
 logger -p local0.info 'firstrun debug: applying license'
 SOAPLicenseClient  --basekey ${bigip_license}
 checkStatusnoret

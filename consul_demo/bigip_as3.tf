@@ -4,12 +4,12 @@
 #  password = var.bigip_password
 #  port = var.bigip_port
 #}
-
-
-#resource "bigip_do"  "do-example" {
-#     do_json = file("do-example.json")
-#     timeout = 15
-#}
+#
+#
+##resource "bigip_do"  "do-example" {
+##     do_json = file("do-example.json")
+##     timeout = 15
+##}
 #data "template_file" "init" {
 #  template = file("bigip_consul.tpl")
 #  vars = {
@@ -24,6 +24,12 @@
 #  depends_on = [ aws_instance.bigip ]
 #}
 
+#provider "bigip" {
+#  address = "54.206.188.177"
+#  username = var.bigip_username
+#  password = var.bigip_password
+#  port = "443"
+#}
 
 #data "template_file" "bigiq" {
 #  template = file("bigiq_as3.tpl")
@@ -33,9 +39,9 @@
 #  }
 #}
 #resource "bigip_bigiq_as3" "exampletask" {
-#  bigiq_address = "13.238.139.177"
+#  bigiq_address = "54.206.188.177"
 #  bigiq_user = "admin"
-#  bigiq_password = "Qwerty123;"
+#  bigiq_password = "admin"
 #  as3_json = data.template_file.bigiq.rendered
 #
 #  depends_on = [ aws_instance.bigip, aws_instance.bigiq ]
