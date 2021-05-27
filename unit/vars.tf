@@ -30,7 +30,7 @@ variable "ami_fedora_server" {
   default = "ami-0567f647e75c7bc05"
 }
 variable "instance_type" {
-  default = "t2.micro"
+  default = "t2.large"
 }
 variable "linux_server_pkgs" {
   default = ["foo"]

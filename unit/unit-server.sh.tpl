@@ -82,5 +82,7 @@ echo "<p>installed node and npm</p>" >> /www/status/index.html
 systemctl stop apache2
 echo "<p>stopped default apache server</p>" >> /www/status/index.html
 echo "<p>FINISHED</p>" >> /www/status/index.html
+pkill unitd
+unitd --modules /usr/lib/unit/modules
 
 echo "firstrun debug: finished-config"
