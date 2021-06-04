@@ -79,10 +79,20 @@ git clone https://github.com/codecowboydotio/helloworld-java /www/jsp
 echo "<p>cloned jsp...</p>" >> /www/status/index.html
 apt install -y nodejs npm
 echo "<p>installed node and npm</p>" >> /www/status/index.html
+apt install -y ansible
+echo "<p>Installed ansible</p>" >> /www/status/index.html
+git clone http://github.com/codecowboydotio/swapi-vue /www/swapi-vue
+echo "<p>Cloned swapi-vue</p>" >> /www/status/index.html
+cd /www/swapi-vue
+npm install -g @vue/cli
+echo "<p>installed vue cli</p>" >> /www/status/index.html
+npm i @vue/cli-service
+echo "<p>installed cli service</p>" >> /www/status/index.html
+sed -i 's/10.1.1.150/api.svkcode.org/g' /www/swapi-vue/src/components/*.vue
 systemctl stop apache2
 echo "<p>stopped default apache server</p>" >> /www/status/index.html
 echo "<p>FINISHED</p>" >> /www/status/index.html
 pkill unitd
-unitd --modules /usr/lib/unit/modules
-
+MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}')
+unitd --modules /usr/lib/unit/modules --control $MY_IP:8888
 echo "firstrun debug: finished-config"
