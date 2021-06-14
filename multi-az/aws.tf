@@ -66,13 +66,43 @@ resource "aws_subnet" "subnet_3" {
 resource "aws_subnet" "subnet_4" {
   vpc_id = aws_vpc.main.id
   cidr_block = var.vpc_subnet_4
-  availability_zone = "${var.aws_region}a"
+  availability_zone = "${var.aws_region}b"
   map_public_ip_on_launch = "true"
 
   tags = {
     for k, v in merge({
       app_type = "production"
       Name = "${var.name-prefix}-${var.project}-subnet_4-tf"
+    },
+    var.default_ec2_tags): k => v
+  }
+}
+
+resource "aws_subnet" "subnet_5" {
+  vpc_id = aws_vpc.main.id
+  cidr_block = var.vpc_subnet_5
+  availability_zone = "${var.aws_region}b"
+  map_public_ip_on_launch = "true"
+
+  tags = {
+    for k, v in merge({
+      app_type = "production"
+      Name = "${var.name-prefix}-${var.project}-subnet_5-tf"
+    },
+    var.default_ec2_tags): k => v
+  }
+}
+
+resource "aws_subnet" "subnet_6" {
+  vpc_id = aws_vpc.main.id
+  cidr_block = var.vpc_subnet_6
+  availability_zone = "${var.aws_region}b"
+  map_public_ip_on_launch = "true"
+
+  tags = {
+    for k, v in merge({
+      app_type = "production"
+      Name = "${var.name-prefix}-${var.project}-subnet_6-tf"
     },
     var.default_ec2_tags): k => v
   }
@@ -120,6 +150,14 @@ resource "aws_route_table_association" "subnet_3" {
 }
 resource "aws_route_table_association" "subnet_4" {
   subnet_id = aws_subnet.subnet_4.id
+  route_table_id = aws_route_table.route-table-tf.id
+}
+resource "aws_route_table_association" "subnet_5" {
+  subnet_id = aws_subnet.subnet_5.id
+  route_table_id = aws_route_table.route-table-tf.id
+}
+resource "aws_route_table_association" "subnet_6" {
+  subnet_id = aws_subnet.subnet_6.id
   route_table_id = aws_route_table.route-table-tf.id
 }
 

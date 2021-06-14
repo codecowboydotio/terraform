@@ -22,18 +22,23 @@ variable "vpc_subnet_3" {
 variable "vpc_subnet_4" {
   default = "10.100.4.0/24"
 }
+variable "vpc_subnet_5" {
+  default = "10.100.5.0/24"
+}
+variable "vpc_subnet_6" {
+  default = "10.100.6.0/24"
+}
 variable "key_name" {
   default = "svk-keypair-f5"
 }
 variable "ami_fedora_server" {
-#  default = "ami-001ccfbcf4a8e0814"
-  default = "ami-0567f647e75c7bc05"
+  default = "ami-001ccfbcf4a8e0814"
 }
-variable "instance_type" {
-  default = "t2.large"
+variable "instance_type_linux_server" {
+  default = "t2.micro"
 }
 variable "bigip_license" {
-  default = "GREKU-WTBPR-XHGBM-IHCGF-OUOTXVJ"
+  default = "IDMJM-VEVJU-ZZEWP-QZCAI-HVGVCUF"
 }
 variable "bigip_port" {
   default = "443"

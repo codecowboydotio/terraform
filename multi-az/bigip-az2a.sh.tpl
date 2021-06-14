@@ -110,6 +110,9 @@ tmsh create /net vlan outside interfaces add { 1.1 }
 tmsh create /net vlan inside interfaces add { 1.2 }
 tmsh create /net self ${subnet_2}/24 vlan outside
 tmsh create /net self ${subnet_3}/24 vlan inside
+tmsh modify /net self ${subnet_2}/24 allow-service all
+tmsh modify /net self ${subnet_3}/24 allow-service all
+
 
 tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }
 logger -p local0.info 'firstrun debug: finished-config'

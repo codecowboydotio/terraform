@@ -33,7 +33,7 @@ resource "aws_instance" "bigip" {
   ami           = var.ami_bigip
   instance_type = var.instance_type_bigip
   key_name = var.key_name
-  user_data = templatefile("bigip.sh.tpl", {
+  user_data = templatefile("bigip-az2a.sh.tpl", {
      bigip_password = var.bigip_password,
      bigip_license = var.bigip_license,
      bigip_port = var.bigip_port
@@ -57,7 +57,7 @@ resource "aws_instance" "bigip" {
   tags = {
     for k, v in merge({
       app_type = "bigip"
-      Name = "${var.name-prefix}-${var.project}-bigip"
+      Name = "${var.name-prefix}-${var.project}-az2a-bigip"
     },
     var.default_ec2_tags): k => v
   }
@@ -107,21 +107,18 @@ resource "aws_eip_association" "subnet_3" {
 
   depends_on = [aws_eip.subnet_3, aws_instance.bigip]
 }
-#output "bigip_mgmt_outside" {
-#  value =  aws_eip.mgmt.public_ip
-#}
-#output "bigip_outside_external" {
-#  value = aws_eip.outside.public_ip
-#}
-#output "bigip_mgmt_internal" {
-#  value = aws_network_interface.aws_subnet_mgmt.private_ip
-#}
+output "bigip_mgmt_outside" {
+  value =  aws_eip.subnet_1.public_ip
+}
+output "bigip_outside_external" {
+  value = aws_eip.subnet_2.public_ip
+}
+output "bigip_mgmt_internal" {
+  value = aws_network_interface.aws_subnet_1.private_ip
+}
 output "bigip_outside_internal" {
   value = aws_network_interface.aws_subnet_2.private_ip
 }
-#output "bigip_client_1_internal" {
-#  value = aws_network_interface.aws_subnet_client_1.private_ip
-#}
-#output "bigip_client_2_internal" {
-#  value = aws_network_interface.aws_subnet_client_2.private_ip
-#}
+output "bigip_inside_internal" {
+  value = aws_network_interface.aws_subnet_3.private_ip
+}
