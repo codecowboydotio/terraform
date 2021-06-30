@@ -14,29 +14,38 @@
              "Application_1": {
                  "class": "Application",
                  "template": "generic",
-             "TESTserviceMain": {
+             "ConsulVIP": {
                  "class": "Service_HTTP",
                  "virtualAddresses": [
                      "${VIP_ADDRESS}"
                  ],
-                 "pool": "web_pool"
-                 },
-                 "web_pool": {
-                     "class": "Pool",
-                     "monitors": [
-                         "http"
-                     ],
-                     "members": [
-                         {
-                           "servicePort": 80,
-                           "addressDiscovery": "consul",
-                           "updateInterval": 10,
-                           "uri": "http://${CONSUL_SERVER}:8500/v1/catalog/service/web?passing",
-                           "credentialUpdate": false
-                         }
-                     ]
+                 "pool": "web_pool",
+                 "policyWAF": {
+                   "use": "My_AWAF_Policy"
                  }
+             },
+             "web_pool": {
+                 "class": "Pool",
+                 "monitors": [
+                     "http"
+                 ],
+                 "members": [
+                     {
+                       "servicePort": 80,
+                       "addressDiscovery": "consul",
+                       "updateInterval": 10,
+                       "uri": "http://${CONSUL_SERVER}:8500/v1/catalog/service/web?passing",
+                       "credentialUpdate": false
+                     }
+                 ]
+             },
+             "My_AWAF_Policy": {
+               "class": "WAF_Policy",
+               "url": "https://raw.githubusercontent.com/codecowboydotio/f5-waf-policy/master/test-policy.xml",
+               "ignoreChanges": false,
+               "enforcementMode": "${WAF_MODE}"
              }
          }
      }
+   }
  }

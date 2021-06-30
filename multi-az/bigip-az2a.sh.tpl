@@ -112,7 +112,12 @@ tmsh create /net self ${subnet_2}/24 vlan outside
 tmsh create /net self ${subnet_3}/24 vlan inside
 tmsh modify /net self ${subnet_2}/24 allow-service all
 tmsh modify /net self ${subnet_3}/24 allow-service all
-
+tmsh create ltm pool web-az2a monitor tcp members add { ${web_server-az2a}:80 { } }
+tmsh create ltm pool ssh-az2a monitor tcp members add { ${web_server-az2a}:22 { } }
+tmsh create /net route  0.0.0.0/0 gw 10.100.2.1
+tmsh create ltm virtual az2a-virt destination ${subnet_2}:80 pool web-az2a ip-protocol tcp profiles add { http } source-address-translation { type automap }
+tmsh create ltm virtual az2a-ssh destination ${subnet_2}:22 pool ssh-az2a ip-protocol tcp source-address-translation { type automap }
+tmsh create ltm virtual gw-outbound destination 0.0.0.0:0 ip-protocol any source-address-translation { type automap }
 
 tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }
 logger -p local0.info 'firstrun debug: finished-config'

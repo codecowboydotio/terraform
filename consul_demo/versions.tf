@@ -5,11 +5,8 @@ terraform {
     }
     bigip = {
       source = "f5networks/bigip"
-      version = "1.8.0"
+    #  version = "1.8.0"
     }
-#    bigiq = {
-#      source = "f5networks/bigip"
-#    }
     template = {
       source = "hashicorp/template"
     }

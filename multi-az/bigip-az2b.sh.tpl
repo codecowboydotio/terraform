@@ -106,6 +106,18 @@ curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-T
 DATA="{\"operation\":\"INSTALL\",\"packageFilePath\":\"/var/config/rest/downloads/$FN\"}"
 curl -kvu $CREDS "https://$IP/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
 
-tmsh modify /sys provision asm level nominal
+tmsh create /net vlan outside interfaces add { 1.1 }
+tmsh create /net vlan inside interfaces add { 1.2 }
+tmsh create /net self ${subnet_5}/24 vlan outside
+tmsh create /net self ${subnet_6}/24 vlan inside
+tmsh modify /net self ${subnet_5}/24 allow-service all
+tmsh modify /net self ${subnet_6}/24 allow-service all
+tmsh create ltm pool web-az2b monitor tcp members add { ${web_server}:80 { } }
+tmsh create ltm pool ssh-az2b monitor tcp members add { ${web_server}:22 { } }
+tmsh create /net route  0.0.0.0/0 gw 10.200.5.1
+tmsh create ltm virtual az2b-virt destination ${subnet_5}:80 pool web-az2b ip-protocol tcp profiles add { http } source-address-translation { type automap }
+tmsh create ltm virtual az2b-ssh destination ${subnet_5}:22 pool ssh-az2b ip-protocol tcp source-address-translation { type automap }
+tmsh create ltm virtual gw-outbound destination 0.0.0.0:0 ip-protocol any source-address-translation { type automap }
+
 tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }
 logger -p local0.info 'firstrun debug: finished-config'

@@ -45,8 +45,6 @@ resource "aws_instance" "bigip-az2a" {
      bigip_port = var.bigip_port
      subnet_2 = aws_network_interface.vpc-a_aws_subnet_2.private_ip
      subnet_3 = aws_network_interface.vpc-a_aws_subnet_3.private_ip
-     web_server-az2a = aws_instance.web-server-az2a.private_ip
-
   })
 
   network_interface {
@@ -71,6 +69,31 @@ resource "aws_instance" "bigip-az2a" {
   }
 }
 
+resource "aws_eip" "subnet_1" {
+  vpc = true
+
+  tags = {
+    Name = "${var.name-prefix}-${var.project}-eip-subnet_1"
+  }
+}
+
+resource "aws_eip" "subnet_2" {
+  vpc = true
+
+  tags = {
+    Name = "${var.name-prefix}-${var.project}-eip-subnet_2"
+  }
+}
+
+resource "aws_eip" "subnet_3" {
+  vpc = true
+
+  tags = {
+    Name = "${var.name-prefix}-${var.project}-eip-subnet_3"
+  }
+}
+
+
 resource "aws_eip_association" "subnet_1" {
   network_interface_id =  aws_network_interface.vpc-a_aws_subnet_1.id
   allocation_id = aws_eip.subnet_1.id
@@ -91,11 +114,17 @@ resource "aws_eip_association" "subnet_3" {
 
   depends_on = [aws_eip.subnet_3, aws_instance.bigip-az2a]
 }
+
+
+
 output "bigip-az2a_mgmt_external" {
-  value =  aws_eip.subnet_1.public_ip
+  value = aws_eip.subnet_1.public_ip
 }
 output "bigip-az2a_outside_external" {
   value = aws_eip.subnet_2.public_ip
+}
+output "bigip-az2a_inside_external" {
+  value = aws_eip.subnet_3.public_ip 
 }
 output "bigip-az2a_mgmt_internal" {
   value = aws_network_interface.vpc-a_aws_subnet_1.private_ip
