@@ -99,7 +99,7 @@ tmsh modify /sys http auth-pam-validate-ip off
 curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.26.0/f5-appsvcs-3.26.0-5.noarch.rpm -o f5-appsvcs-3.26.0-5.noarch.rpm
 FN=f5-appsvcs-3.26.0-5.noarch.rpm
 CREDS=admin:admin
-IP="127.0.0.1:8443"
+IP="127.0.0.1:${bigip_port}"
 LEN=$(wc -c $FN | awk 'NR==1{print $1}')
 curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
 
@@ -114,5 +114,6 @@ tmsh modify /net self ${subnet_2}/24 allow-service all
 tmsh modify /net self ${subnet_3}/24 allow-service all
 tmsh create /net route  0.0.0.0/0 gw 10.100.2.1
 
+echo -e "${bigip_password}\n${bigip_password}" | passwd root
 tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }
 logger -p local0.info 'firstrun debug: finished-config'

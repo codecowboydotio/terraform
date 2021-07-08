@@ -1,7 +1,7 @@
 resource "aws_instance" "ansible-v1-server-az2a" {
   ami           = var.ami_fedora_server
   instance_type = var.instance_type_linux_server
-  subnet_id = aws_subnet.vpc-a_subnet_3.id
+  subnet_id = aws_subnet.vpc-a_subnet_1.id
   key_name = var.key_name
   security_groups = [aws_security_group.vpc-a_allow_all.id]
   user_data = templatefile("ansible-v1-server-az2a.sh.tpl", {
