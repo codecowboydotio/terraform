@@ -1,0 +1,48 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeNetworkInterfaceAttribute",
+                "ec2:DescribeRouteTables",
+                "s3:ListAllMyBuckets",
+                "ec2:AssociateAddress",
+                "ec2:DisassociateAddress",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "ec2:CreateRoute",
+                "ec2:ReplaceRoute"
+            ],
+            "Resource": "arn:aws:ec2:ap-southeast-2:021766223203:route-table/*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketTagging"
+            ],
+            "Resource": "arn:aws:s3:::svk-multi-az-cfe-bucket",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::svk-multi-az-cfe-bucket/*",
+            "Effect": "Allow"
+        }
+    ]
+}
+

@@ -96,10 +96,10 @@ SOAPLicenseClient  --basekey ${bigip_license}
 checkStatusnoret
 tmsh modify sys global-settings gui-setup disabled
 tmsh modify /sys http auth-pam-validate-ip off
-curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.26.0/f5-appsvcs-3.26.0-5.noarch.rpm -o f5-appsvcs-3.26.0-5.noarch.rpm
-FN=f5-appsvcs-3.26.0-5.noarch.rpm
+curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.29.0/f5-appsvcs-3.29.0-3.noarch.rpm -o f5-appsvcs-3.29.0-3.noarch.rpm
+FN=f5-appsvcs-3.29.0-3.noarch.rpm
 CREDS=admin:admin
-IP="127.0.0.1:8443"
+IP="127.0.0.1"
 LEN=$(wc -c $FN | awk 'NR==1{print $1}')
 curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
 
@@ -108,15 +108,15 @@ curl -kvu $CREDS "https://$IP/mgmt/shared/iapp/package-management-tasks" -H "Ori
 
 tmsh create /net vlan outside interfaces add { 1.1 }
 tmsh create /net vlan inside interfaces add { 1.2 }
-tmsh create /net self ${subnet_5}/24 vlan outside
-tmsh create /net self ${subnet_6}/24 vlan inside
-tmsh modify /net self ${subnet_5}/24 allow-service all
+tmsh create /net self ${subnet_6}/24 vlan outside
+tmsh create /net self ${subnet_7}/24 vlan inside
 tmsh modify /net self ${subnet_6}/24 allow-service all
-tmsh create ltm pool web-az2b monitor tcp members add { ${web_server}:80 { } }
-tmsh create ltm pool ssh-az2b monitor tcp members add { ${web_server}:22 { } }
-tmsh create /net route  0.0.0.0/0 gw 10.200.5.1
-tmsh create ltm virtual az2b-virt destination ${subnet_5}:80 pool web-az2b ip-protocol tcp profiles add { http } source-address-translation { type automap }
-tmsh create ltm virtual az2b-ssh destination ${subnet_5}:22 pool ssh-az2b ip-protocol tcp source-address-translation { type automap }
+tmsh modify /net self ${subnet_7}/24 allow-service all
+tmsh create ltm pool web-az2b monitor tcp members add { ${web_server-az2b}:80 { } }
+tmsh create ltm pool ssh-az2b monitor tcp members add { ${web_server-az2b}:22 { } }
+tmsh create /net route  0.0.0.0/0 gw 10.100.6.1
+tmsh create ltm virtual az2b-virt destination 10.100.6.11:80 pool web-az2b ip-protocol tcp profiles add { http } source-address-translation { type automap }
+tmsh create ltm virtual az2b-ssh destination 10.100.6.11:22 pool ssh-az2b ip-protocol tcp source-address-translation { type automap }
 tmsh create ltm virtual gw-outbound destination 0.0.0.0:0 ip-protocol any source-address-translation { type automap }
 
 tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }

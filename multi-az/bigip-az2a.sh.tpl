@@ -96,10 +96,10 @@ SOAPLicenseClient  --basekey ${bigip_license}
 checkStatusnoret
 tmsh modify sys global-settings gui-setup disabled
 tmsh modify /sys http auth-pam-validate-ip off
-curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.26.0/f5-appsvcs-3.26.0-5.noarch.rpm -o f5-appsvcs-3.26.0-5.noarch.rpm
-FN=f5-appsvcs-3.26.0-5.noarch.rpm
+curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.29.0/f5-appsvcs-3.29.0-3.noarch.rpm -o f5-appsvcs-3.29.0-3.noarch.rpm
+FN=f5-appsvcs-3.29.0-3.noarch.rpm
 CREDS=admin:admin
-IP="127.0.0.1:8443"
+IP="127.0.0.1"
 LEN=$(wc -c $FN | awk 'NR==1{print $1}')
 curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
 
@@ -115,8 +115,8 @@ tmsh modify /net self ${subnet_3}/24 allow-service all
 tmsh create ltm pool web-az2a monitor tcp members add { ${web_server-az2a}:80 { } }
 tmsh create ltm pool ssh-az2a monitor tcp members add { ${web_server-az2a}:22 { } }
 tmsh create /net route  0.0.0.0/0 gw 10.100.2.1
-tmsh create ltm virtual az2a-virt destination ${subnet_2}:80 pool web-az2a ip-protocol tcp profiles add { http } source-address-translation { type automap }
-tmsh create ltm virtual az2a-ssh destination ${subnet_2}:22 pool ssh-az2a ip-protocol tcp source-address-translation { type automap }
+#tmsh create ltm virtual az2a-virt destination 10.100.2.11:80 pool web-az2a ip-protocol tcp profiles add { http } source-address-translation { type automap }
+#tmsh create ltm virtual az2a-ssh destination 10.100.2.11:22 pool ssh-az2a ip-protocol tcp source-address-translation { type automap }
 tmsh create ltm virtual gw-outbound destination 0.0.0.0:0 ip-protocol any source-address-translation { type automap }
 
 tmsh modify sys global-settings { gui-security-banner enabled gui-security-banner-text 'AUTOMATIC CONFIGURATION IS COMPLETE' }

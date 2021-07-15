@@ -30,7 +30,7 @@ variable "instance_type_linux_server" {
 }
 
 variable "bigip_license-az2a" {
-  default = "UGUNB-OXEZY-YGXRL-HZNGG-WEHRYNJ"
+  default = "JPJWV-UINBS-XRZSS-PUHTX-SNMIRJT"
 }
 variable "bigip_port" {
   default = "443"
