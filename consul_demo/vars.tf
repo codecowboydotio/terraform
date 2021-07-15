@@ -23,7 +23,7 @@ variable "bigip_port" {
   default = "8443"
 }
 variable "bigip_license" {
-  default = "BLJVU-DNBCQ-UDMYB-WQSVQ-CVJJEXP"
+  default = "NINQO-YUHJJ-TNDUH-TJBMB-DUJQAZN"
 }
 variable "bigiq_license" {
   default = "VBQQV-BGDTPF-ELN-WPKQYFZ-ROSJYUS"

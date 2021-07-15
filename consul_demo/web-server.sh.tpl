@@ -59,6 +59,7 @@ cat << EOF > /etc/consul.d/web.json
   }
 }
 EOF
+sleep 180
 nohup /root/consul.sh &
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'
