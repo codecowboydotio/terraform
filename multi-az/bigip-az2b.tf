@@ -45,7 +45,6 @@ resource "aws_eip" "subnet_6_2" {
   tags = {
     Name = "${var.name-prefix}-${var.project}-eip-subnet_6_2"
     f5_cloud_failover_label = var.cfe_deployment_name
-    #f5_cloud_failover_vips = "${aws_network_interface.vpc-a_aws_subnet_2.private_ip},${aws_network_interface.vpc-b_aws_subnet_5.private_ip}"
     f5_cloud_failover_vips = "10.100.2.21,10.100.6.21"
   }
 }
@@ -128,9 +127,9 @@ resource "aws_eip_association" "subnet_7" {
 output "bigip-az2b_mgmt_external" {
   value =  aws_eip.subnet_5.public_ip
 }
-#output "bigip-az2b_outside_external_1" {
-#  value = aws_eip.subnet_6_1.public_ip
-#}
+output "bigip-az2b_outside_external_1" {
+  value = aws_eip.subnet_6_1.public_ip
+}
 output "bigip-az2b_outside_external_2" {
   value = aws_eip.subnet_6_2.public_ip
 }
