@@ -35,3 +35,10 @@ variable "instance_type" {
 variable "linux_server_pkgs" {
   default = ["foo"]
 }
+variable "nginx_ssh_user" {
+  default = "ubuntu"
+}
+variable "ssh_key_location" {
+  default = "~/aws-keyfile.pem"
+}
+

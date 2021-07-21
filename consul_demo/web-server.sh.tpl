@@ -30,7 +30,7 @@ unzip /root/consul_1.8.3_linux_amd64.zip -d /root/
 mkdir -p /etc/consul.d
 mkdir -p /var/log/consul
 cp -p /root/consul /usr/bin
-echo "consul agent -config-dir=/etc/consul.d -log-file=/var/log/consul/consul.log -data-dir=/tmp -join ${consul_address}" > /root/consul.sh
+echo "consul agent -config-dir=/etc/consul.d -log-file=/var/log/consul/consul.log -data-dir=/tmp -retry-join ${consul_address}" > /root/consul.sh
 chmod 755 /root/consul.sh
 git clone https://github.com/platzhersh/pacman-canvas /var/www/html/
 mv /var/www/html/index.htm /var/www/html/index.html
@@ -45,7 +45,8 @@ cat << EOF > /etc/consul.d/web.json
     "meta": {
       "VSIP": "${vsip}",
       "VSPORT": "80",
-      "AS3TMPL": "http"
+      "AS3TMPL": "http",
+      "RD": "%10"
     },
     "check": {
       "id": "service_check",
@@ -59,7 +60,7 @@ cat << EOF > /etc/consul.d/web.json
   }
 }
 EOF
-sleep 180
+#sleep 180
 nohup /root/consul.sh &
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'

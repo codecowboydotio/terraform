@@ -37,9 +37,10 @@ apt update
 apt install -y php php-dev libphp-embed
 apt update
 apt install -y unit
-apt install -y unit-dev unit-go unit-jsc11 unit-jsc13 unit-jsc14 unit-perl unit-php unit-python3.8 unit-ruby
+apt install -y unit-dev unit-go unit-jsc11 unit-jsc13 unit-jsc14 unit-perl unit-php unit-python2.7 unit-python3.8 unit-ruby
 systemctl start unit
 mkdir -p /www/status
+chown unit:unit /www
 cat << EOF > /www/status/index.html
 <HTML>
 <head>
@@ -65,34 +66,77 @@ curl -X PUT --data-binary '{
 }' --unix-socket /var/run/control.unit.sock http://localhost/config/
 apt install -y docker.io
 echo "<p>installed docker runtime...</p>" >> /www/status/index.html
-git clone https://github.com/codecowboydotio/dockerfiles
-echo "<p>cloned dockerfiles...</p>" >> /www/status/index.html
-cd dockerfiles/swapi-json
-docker build . --tag=swapi
-echo "<p>built swapi-json container image...</p>" >> /www/status/index.html
-docker run -d -p 3000:3000 swapi
-echo "<p>deployed container image...</p>" >> /www/status/index.html
-git clone https://github.com/codecowboydotio/pacman-canvas /www/pacman-canvas
-mv /www/pacman-canvas/index.htm /www/pacman-canvas/index.html
-echo "<p>cloned pacman...</p>" >> /www/status/index.html
-git clone https://github.com/codecowboydotio/helloworld-java /www/jsp
-echo "<p>cloned jsp...</p>" >> /www/status/index.html
-apt install -y nodejs npm
-echo "<p>installed node and npm</p>" >> /www/status/index.html
-apt install -y ansible
-echo "<p>Installed ansible</p>" >> /www/status/index.html
-git clone http://github.com/codecowboydotio/swapi-vue /www/swapi-vue
-echo "<p>Cloned swapi-vue</p>" >> /www/status/index.html
-cd /www/swapi-vue
-npm install -g @vue/cli
-echo "<p>installed vue cli</p>" >> /www/status/index.html
-npm i @vue/cli-service
-echo "<p>installed cli service</p>" >> /www/status/index.html
-sed -i 's/10.1.1.150/api.svkcode.org/g' /www/swapi-vue/src/components/*.vue
+##git clone https://github.com/codecowboydotio/dockerfiles
+##echo "<p>cloned dockerfiles...</p>" >> /www/status/index.html
+##cd dockerfiles/swapi-json
+##docker build . --tag=swapi
+##echo "<p>built swapi-json container image...</p>" >> /www/status/index.html
+##docker run -d -p 3000:3000 swapi
+##echo "<p>deployed container image...</p>" >> /www/status/index.html
+##git clone https://github.com/codecowboydotio/pacman-canvas /www/pacman-canvas
+##mv /www/pacman-canvas/index.htm /www/pacman-canvas/index.html
+##cp /tmp/nginx-hex.svg /www/pacman-canvas/img/blinky.svg
+##cp /tmp/nginx-hex.svg /www/pacman-canvas/img/clyde.svg
+##cp /tmp/nginx-hex.svg /www/pacman-canvas/img/inky.svg
+##cp /tmp/nginx-hex.svg /www/pacman-canvas/img/pinky.svg
+##echo "<p>cloned pacman...</p>" >> /www/status/index.html
+##git clone https://github.com/codecowboydotio/helloworld-java /www/jsp
+##echo "<p>cloned jsp...</p>" >> /www/status/index.html
+##apt install -y nodejs npm
+##echo "<p>installed node and npm</p>" >> /www/status/index.html
+##apt install -y ansible
+##echo "<p>Installed ansible</p>" >> /www/status/index.html
+##git clone http://github.com/codecowboydotio/swapi-vue /www/swapi-vue
+##echo "<p>Cloned swapi-vue</p>" >> /www/status/index.html
+##cd /www/swapi-vue
+##npm install -g @vue/cli
+##echo "<p>installed vue cli</p>" >> /www/status/index.html
+##npm i @vue/cli-service
+##echo "<p>installed cli service</p>" >> /www/status/index.html
+##sed -i 's/10.1.1.150/api.svkcode.org/g' /www/swapi-vue/src/components/*.vue
 systemctl stop apache2
 echo "<p>stopped default apache server</p>" >> /www/status/index.html
+apt install -y pip python
+pip install flask
+pip install flasgger
+pip install gitpython
+echo "<p>Installed Unit GIT API pre-requisites</p>" >> /www/status/index.html
+git clone http://github.com/codecowboydotio/git-pull-api /www/git-pull-api
+echo "<p>Cloned Unit GIT API</p>" >> /www/status/index.html
 echo "<p>FINISHED</p>" >> /www/status/index.html
 pkill unitd
-MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}')
+MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}' | head -1)
 unitd --modules /usr/lib/unit/modules --control $MY_IP:8888
+curl -X PUT --data-binary '{
+        "listeners": {
+                "*:8080": {
+                        "pass": "applications/python"
+                },
+                "*:80": {
+                        "pass": "routes"
+                }
+        },
+
+        "routes": [
+                {
+                     "action": {
+                         "share": "/www/pacman-canvas/"
+                        }
+                }
+        ],
+
+
+        "applications": {
+                "python": {
+                        "type": "python",
+                        "path": "/www/git-pull-api/",
+                        "module": "wsgi",
+                        "callable": "app",
+                        "environment": {
+                                "version": "2.0"
+                        }
+                }
+        }
+}' http://$MY_IP:8888/config
+
 echo "firstrun debug: finished-config"

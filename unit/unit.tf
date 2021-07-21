@@ -15,6 +15,18 @@ resource "aws_instance" "unit-server" {
     },
     var.default_ec2_tags): k => v
   }
+
+  provisioner "file" {
+    source      = "files/"
+    destination = "/tmp"
+
+    connection {
+      type     = "ssh"
+      user     = var.nginx_ssh_user
+      private_key = file(var.ssh_key_location)
+      host     = self.public_ip
+    }
+  }
 }
 
 
