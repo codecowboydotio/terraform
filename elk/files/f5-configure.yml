@@ -5,7 +5,7 @@
 
   vars:
     bigip_provider:
-      server: 54.79.143.157
+      server: 54.253.9.147
       user: admin
       password: password
       validate_certs: no
@@ -16,15 +16,15 @@
     vlan_1_mask: 255.255.255.0
     vlan_2_mask: 255.255.255.0
     vlan_3_mask: 255.255.255.0
-    vlan_1_ip: 10.200.7.213
-    vlan_2_ip: 10.200.8.88
-    vlan_3_ip: 10.200.6.123
+    vlan_1_ip: 10.200.7.232
+    vlan_2_ip: 10.200.8.132
+    vlan_3_ip: 10.200.6.145
     default_outside_route_gw: 10.200.6.1
     hsl_log_dest: hsl-elk-dest
     bigip_pool: hsl-elk-pool
-    bigip_pool_member: 10.200.5.55
+    bigip_pool_member: 10.200.5.47
     bigip_pool_member_port: 5000
-    client_1_private_ip: 10.200.7.85
+    client_1_private_ip: 10.200.7.4
     ssh_pool: ssh_pool
     bigip_virtual_name: inbound_ssh_vs
     bigip_virtual_cgnat_name: cgnat_napt

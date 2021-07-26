@@ -25,9 +25,6 @@ variable "vpc-a_subnet_4" {
 variable "key_name" {
   default = "svk-keypair-f5"
 }
-variable "ami_fedora_server" {
-  default = "ami-001ccfbcf4a8e0814"
-}
 variable "instance_type_linux_server" {
   default = "t2.micro"
 }
@@ -37,12 +34,16 @@ data "aws_ami" "distro" {
 
   filter {
     name   = "name"
-    values = ["Fedora-Cloud-Base-34-20210720.0.x86_64-hvm-*gp2-*"]
+    values = ["Fedora-Cloud-Base-34-1.2*"]
   }
 
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 
   # fedora owner

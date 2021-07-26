@@ -120,7 +120,7 @@ curl -X PUT --data-binary '{
         "routes": [
                 {
                      "action": {
-                         "share": "/www/pacman-canvas/"
+                         "share": "/www/pacman-unit/"
                         }
                 }
         ],

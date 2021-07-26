@@ -1,5 +1,5 @@
 resource "aws_instance" "web-server-az2a" {
-  ami           = var.ami_fedora_server
+  ami           = data.aws_ami.distro.id
   instance_type = var.instance_type_linux_server
   subnet_id = aws_subnet.vpc-a_subnet_4.id
   key_name = var.key_name
