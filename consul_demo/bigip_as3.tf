@@ -5,7 +5,7 @@
 #  port = var.bigip_port
 #}
 #
-#
+
 ##resource "bigip_do"  "do-example" {
 ##     do_json = file("do-example.json")
 ##     timeout = 15
@@ -15,6 +15,7 @@
 #  vars = {
 #    VIP_ADDRESS = aws_instance.bigip.private_ip
 #    CONSUL_SERVER = aws_instance.consul-server.public_ip
+#    WAF_MODE = "blocking"
 #  }
 #}
 

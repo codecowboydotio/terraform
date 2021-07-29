@@ -3,9 +3,10 @@ resource "aws_instance" "ansible-v2-server-az2a" {
   instance_type = var.instance_type_linux_server
   subnet_id = aws_subnet.vpc-a_subnet_1.id
   key_name = var.key_name
-  security_groups = [aws_security_group.vpc-a_allow_all.id]
+  vpc_security_group_ids = [aws_security_group.vpc-a_allow_all.id]
   user_data = templatefile("ansible-v2-server-az2a.sh.tpl", {
      linux_server_pkgs = var.project
+     bigip_address = aws_network_interface.vpc-a_aws_subnet_1.private_ip
   })
 
   tags = {

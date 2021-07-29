@@ -20,6 +20,7 @@ deb-src https://packages.nginx.org/unit/ubuntu/ groovy unit
 EOF
 apt-update
 apt install -y build-essential
+apt install -y sysvbanner
 apt install -y nodejs npm
 apt install -y golang
 curl -sL https://deb.nodesource.com/setup_X.Y | sudo bash -
