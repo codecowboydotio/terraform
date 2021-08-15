@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svk
+  namespace: s-vankalken
+  labels:
+    app: svk
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: svk
+  template:
+    metadata:
+      labels:
+        app: svk
+    spec:
+      containers:
+      - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+        imagePullPolicy: IfNotPresent
+        name: svk
+        ports:
+          - containerPort: 8080

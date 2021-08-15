@@ -37,7 +37,7 @@ resource "volterra_virtual_k8s" "vk8s" {
 
 resource "time_sleep" "vk8s_wait" {
   depends_on = [volterra_virtual_k8s.vk8s]
-  create_duration = "120s"
+  create_duration = "150s"
 }
 
 resource "volterra_api_credential" "cred" {
@@ -55,7 +55,7 @@ resource "local_file" "kubeconfig" {
 
 resource "volterra_app_type" "at" {
   // This naming simplifies the 'mesh' cards
-  name      = "demo-app"
+  name      = "s-vankalken-demo-app"
   namespace = "shared"
   features {
     type = "BUSINESS_LOGIC_MARKUP"
@@ -73,4 +73,3 @@ resource "volterra_app_type" "at" {
     enable = true
   }
 }
-
