@@ -7,11 +7,12 @@ data "kubectl_path_documents" "manifests" {
   vars = {
       namespace  = var.ns
       manifest_app_name = var.manifest_app_name
+      servicename = var.servicename
   }
 }
 
 resource "time_sleep" "manifest_wait" {
-  create_duration = "20s"
+  create_duration = "120s"
   depends_on = [data.kubectl_path_documents.manifests]
 }
 

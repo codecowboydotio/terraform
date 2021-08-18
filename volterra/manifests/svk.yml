@@ -25,7 +25,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${manifest_app_name}
+  name: ${servicename}
   labels:
     app: ${manifest_app_name}
 spec:

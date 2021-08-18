@@ -47,7 +47,7 @@ resource "volterra_virtual_k8s" "vk8s" {
 
 
 resource "volterra_api_credential" "cred" {
-  name      = format("%s-api-cred", var.app_name)
+  name      = format("%s-api-cred", var.manifest_app_name)
   api_credential_type = "KUBE_CONFIG"
   virtual_k8s_namespace = volterra_namespace.ns.name
   virtual_k8s_name = volterra_virtual_k8s.vk8s.name
@@ -67,7 +67,7 @@ resource "local_file" "kubeconfig" {
 }
 
 resource "volterra_origin_pool" "backend" {
-  name                   = format("%s-be", var.app_name)
+  name                   = format("%s-be", var.manifest_app_name)
   namespace              = volterra_namespace.ns.name
   depends_on             = [time_sleep.ns_wait]
   description            = format("Origin pool pointing to backend k8s service running in main-vsite")
@@ -92,12 +92,12 @@ resource "volterra_origin_pool" "backend" {
 }
 
 resource "volterra_http_loadbalancer" "backend" {
-  name                            = format("%s-be", var.app_name)
+  name                            = format("%s-be", var.manifest_app_name)
   namespace                       = volterra_namespace.ns.name
   depends_on                      = [time_sleep.ns_wait]
-  description                     = format("HTTP loadbalancer object for %s origin server", var.app_name)
+  description                     = format("HTTP loadbalancer object for %s origin server", var.manifest_app_name)
   #domains                         = ["svk-demo-app.sa.f5demos.com"]
-  domains                         = ["${var.app_name}.${var.domain}"]
+  domains                         = ["${var.manifest_app_name}.${var.domain}"]
   advertise_on_public_default_vip = true
   labels                          = { "ves.io/app_type" = volterra_app_type.at.name }
   default_route_pools {
@@ -120,7 +120,7 @@ resource "volterra_http_loadbalancer" "backend" {
 
 resource "volterra_app_type" "at" {
   // This naming simplifies the 'mesh' cards
-  name      = var.app_name
+  name      = var.manifest_app_name
   namespace = "shared"
   features {
     type = "BUSINESS_LOGIC_MARKUP"
@@ -139,4 +139,4 @@ resource "volterra_app_type" "at" {
   }
 }
 
-output "domain" { value = "${var.app_name}.${var.domain}" }
+output "domain" { value = "${var.manifest_app_name}.${var.domain}" }
