@@ -4,13 +4,23 @@ provider "kubectl" {
 
 data "kubectl_path_documents" "manifests" {
   pattern = "./manifests/*.yml"
+  vars = {
+      namespace  = var.ns
+  }
 }
+
+resource "time_sleep" "manifest_wait" {
+  create_duration = "20s"
+  depends_on = [data.kubectl_path_documents.manifests]
+}
+
 
 resource "kubectl_manifest" "documents" {
     count     = length(data.kubectl_path_documents.manifests.documents)
     yaml_body = element(data.kubectl_path_documents.manifests.documents, count.index)
 #    //This provider doesn't enforce NS from kubeconfig context
     override_namespace = "s-vankalken"
+    depends_on = [local_file.kubeconfig, data.kubectl_path_documents.manifests, time_sleep.manifest_wait]
 }
 
 
