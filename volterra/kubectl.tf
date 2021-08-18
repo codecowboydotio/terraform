@@ -6,6 +6,7 @@ data "kubectl_path_documents" "manifests" {
   pattern = "./manifests/*.yml"
   vars = {
       namespace  = var.ns
+      manifest_app_name = var.manifest_app_name
   }
 }
 
