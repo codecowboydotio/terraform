@@ -111,6 +111,13 @@ resource "volterra_http_loadbalancer" "backend" {
     http_redirect = true
     no_mtls       = true
   }
+  more_option {
+    response_headers_to_add {
+        name   = "Access-Control-Allow-Origin"
+        value  = "*"
+        append = false
+    }
+  }
   disable_waf                     = true
   disable_rate_limit              = true
   round_robin                     = true
