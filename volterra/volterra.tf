@@ -21,7 +21,6 @@ resource "volterra_virtual_site" "main" {
   depends_on = [time_sleep.ns_wait]
 
   site_selector {
-    #expressions =  ["ves.io/siteName in (ves-io-ny8-nyc)"]
     expressions = var.site_selector
   }
   site_type = "REGIONAL_EDGE"
@@ -51,7 +50,7 @@ resource "volterra_api_credential" "cred" {
   api_credential_type = "KUBE_CONFIG"
   virtual_k8s_namespace = volterra_namespace.ns.name
   virtual_k8s_name = volterra_virtual_k8s.vk8s.name
-  depends_on = [time_sleep.vk8s_wait]
+####  depends_on = [time_sleep.vk8s_wait]
 }
 
 resource "time_sleep" "vk8s_cred_wait" {

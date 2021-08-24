@@ -6,7 +6,7 @@ metadata:
   labels:
     app: ${manifest_app_name}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ${manifest_app_name}
@@ -16,7 +16,7 @@ spec:
         app: ${manifest_app_name}
     spec:
       containers:
-      - image: public.ecr.aws/y6q2t0j9/demos:latest
+      - image: public.ecr.aws/y6q2t0j9/demos:swapi-api
         imagePullPolicy: IfNotPresent
         name: ${manifest_app_name}
         ports:

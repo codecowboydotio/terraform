@@ -7,7 +7,10 @@ data "kubectl_path_documents" "manifests" {
   vars = {
       namespace  = var.ns
       manifest_app_name = var.manifest_app_name
+      frontend_manifest_app_name = var.frontend_manifest_app_name
+      frontend_service_name = var.frontend_servicename
       servicename = var.servicename
+      domain = var.domain
   }
 }
 

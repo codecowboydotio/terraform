@@ -1,9 +1,9 @@
 resource "aws_instance" "unit-server" {
-  ami           = var.ami_fedora_server
-  instance_type = var.instance_type
-  subnet_id = aws_subnet.subnet_1.id
+  ami           = data.aws_ami.distro.id
+  instance_type = var.instance_type_linux_server
+  subnet_id = aws_subnet.vpc-a_subnet_1.id
   key_name = var.key_name
-  vpc_security_group_ids = [ aws_security_group.allow_all.id ]
+  vpc_security_group_ids = [ aws_security_group.vpc-a_allow_all.id ]
   user_data = templatefile("unit-server.sh.tpl", { 
      linux_server_pkgs = var.linux_server_pkgs
   })
