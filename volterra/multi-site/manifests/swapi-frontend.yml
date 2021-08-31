@@ -5,8 +5,11 @@ metadata:
   namespace: ${namespace}
   labels:
     app: ${frontend_manifest_app_name}
+  annotations:
+    ves.io/workload-flavor: tiny
+    ves.io/virtual-sites: ${namespace}/s-vankalken-vs
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ${frontend_manifest_app_name}

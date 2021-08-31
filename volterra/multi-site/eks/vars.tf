@@ -5,7 +5,7 @@ variable "name-prefix" {
   default = "svk"
 }
 variable "project" {
-  default = "ansible"
+  default = "scaffold"
 }
 variable "vpc-a_cidr_block" {
   default = "10.100.0.0/16"
@@ -19,29 +19,34 @@ variable "vpc-a_subnet_2" {
 variable "vpc-a_subnet_3" {
   default = "10.100.3.0/24"
 }
+variable "vpc-a_subnet_4" {
+  default = "10.100.4.0/24"
+}
 variable "key_name" {
   default = "svk-keypair-f5"
-}
-variable "ami_fedora_server" {
-  default = "ami-001ccfbcf4a8e0814"
 }
 variable "instance_type_linux_server" {
   default = "t2.micro"
 }
 
-variable "bigip_license-az2a" {
-  default = "WSQXX-FTFYZ-YTKAT-XDYNN-ANQFIVF"
-}
-variable "bigip_port" {
-  default = "443"
-}
-variable "bigip_password" {
-  default = "password"
-}
-variable "ami_bigip" {
-  default = "ami-012acc5cdab881a3b"
-}
-variable "instance_type_bigip" {
-  default = "m4.2xlarge"
+data "aws_ami" "distro" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["Fedora-Cloud-Base-34-1.2*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  # fedora owner
+  owners = [ "125523088429" ]
 }
 

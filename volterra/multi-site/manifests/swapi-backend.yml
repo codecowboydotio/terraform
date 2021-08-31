@@ -2,11 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: svk-swapi-api
-  namespace: ${ namespace }
+  namespace: s-vankalken-be
   labels:
     app: ${manifest_app_name}
+  annotations:
+    ves.io/workload-flavor: tiny
+    ves.io/virtual-sites: s-vankalken-be/s-vankalken-be-vs
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ${manifest_app_name}

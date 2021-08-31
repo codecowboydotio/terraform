@@ -1,0 +1,16 @@
+            apiVersion: v1
+            kind: Service
+            metadata:
+              labels:
+                app: svk-swapi-api7
+              name: svk-swapi-api7
+              namespace: s-vankalken-be
+            spec:
+              ports:
+              - name: grpc
+                port: 3000
+                targetPort: 3000
+              selector:
+                app: svk-swapi-api7
+              type: ClusterIP
+

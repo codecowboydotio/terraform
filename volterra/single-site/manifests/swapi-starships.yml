@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svk-swapi-starships-api
+  namespace: ${namespace}
+  labels:
+    app: ${starships_manifest_app_name}
+  annotations:
+    ves.io/workload-flavor: tiny
+    ves.io/virtual-sites: ${namespace}/s-vankalken-vs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${starships_manifest_app_name}
+  template:
+    metadata:
+      labels:
+        app: ${starships_manifest_app_name}
+    spec:
+      containers:
+      - image: public.ecr.aws/y6q2t0j9/demos:swapi-api
+        imagePullPolicy: IfNotPresent
+        name: ${starships_manifest_app_name}
+        ports:
+          - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${starships_servicename}
+  labels:
+    app: ${starships_manifest_app_name}
+spec:
+  type: ClusterIP
+  selector:
+    app: ${starships_manifest_app_name}
+  ports:
+  - name: grpc
+    port: 3000
+    targetPort: 3000

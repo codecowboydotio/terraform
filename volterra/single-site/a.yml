@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: unit-pvc
+  namespace: s-vankalken
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  volumeMode: Filesystem
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svk-unit
+  namespace: s-vankalken
+  labels:
+    app: svk-unit
+  annotations:
+    ves.io/workload-flavor: tiny
+    ves.io/virtual-sites: s-vankalken/s-vankalken-vs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: svk-unit
+  template:
+    metadata:
+      labels:
+        app: svk-unit
+    spec:
+      containers:
+      - image: public.ecr.aws/y6q2t0j9/demos:full-unit
+        imagePullPolicy: IfNotPresent
+        name: svk-unit
+        volumeMounts:
+        - name: unit-data
+          mountPath: /fooble
+        ports:
+          - containerPort: 8080
+          - containerPort: 8181
+      volumes:
+      - name: unit-data
+        persistentVolumeClaim:
+          claimName: unit-pvc 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svk-unit
+  labels:
+    app: svk-unit
+spec:
+  type: ClusterIP
+  selector:
+    app: svk-unit
+  ports:
+  - name: control
+    port: 8080
+    targetPort: 8080
+  - name: app
+    port: 8181
+    targetPort: 8181

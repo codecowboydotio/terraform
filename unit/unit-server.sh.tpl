@@ -74,8 +74,8 @@ docker build . --tag=swapi
 echo "<p>built swapi-json container image...</p>" >> /www/status/index.html
 docker run -d -p 3000:3000 swapi
 echo "<p>deployed container image...</p>" >> /www/status/index.html
-git clone https://github.com/codecowboydotio/helloworld-java /www/jsp
-echo "<p>cloned jsp...</p>" >> /www/status/index.html
+#git clone https://github.com/codecowboydotio/helloworld-java /www/jsp
+#echo "<p>cloned jsp...</p>" >> /www/status/index.html
 apt install -y nodejs npm
 echo "<p>installed node and npm</p>" >> /www/status/index.html
 apt install -y ansible

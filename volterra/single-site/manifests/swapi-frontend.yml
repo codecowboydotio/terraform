@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svk-swapi-frontend
+  namespace: ${namespace}
+  labels:
+    app: ${frontend_manifest_app_name}
+  annotations:
+    ves.io/workload-flavor: tiny
+    ves.io/virtual-sites: ${namespace}/s-vankalken-vs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${frontend_manifest_app_name}
+  template:
+    metadata:
+      labels:
+        app: ${frontend_manifest_app_name}
+    spec:
+      containers:
+      - image: public.ecr.aws/y6q2t0j9/demos:swapi-frontend
+        imagePullPolicy: IfNotPresent
+        name: ${frontend_manifest_app_name}
+        ports:
+          - containerPort: 8080
+        env:
+          - name: API_APP_SERVER_URL
+            value: "https://${manifest_app_name}.${domain}"
+          - name: PEOPLE_API_APP_SERVER_URL
+            value: "https://${people_manifest_app_name}.${domain}"
+          - name: VEHICLES_API_APP_SERVER_URL
+            value: "https://${vehicles_manifest_app_name}.${domain}"
+          - name: STARSHIPS_API_APP_SERVER_URL
+            value: "https://${starships_manifest_app_name}.${domain}"
+          - name: PLANETS_API_APP_SERVER_URL
+            value: "http://10.1.1.150"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${frontend_service_name}
+  labels:
+    app: ${frontend_manifest_app_name}
+spec:
+  type: ClusterIP
+  selector:
+    app: ${frontend_manifest_app_name}
+  ports:
+  - name: grpc
+    port: 8080
+    targetPort: 8080
+
