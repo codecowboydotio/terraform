@@ -15,11 +15,11 @@ exec 2>&1
 echo "firstrun debug: starting-config"
 curl -sL https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 cat << EOF >  /etc/apt/sources.list.d/unit.list
-deb https://packages.nginx.org/unit/ubuntu/ groovy unit
-deb-src https://packages.nginx.org/unit/ubuntu/ groovy unit
+deb https://packages.nginx.org/unit/ubuntu/ focal unit
+deb-src https://packages.nginx.org/unit/ubuntu/ focal unit
 EOF
 apt-update
-apt install -y build-essential
+apt install -y build-essential libcap2-bin net-tools
 apt install -y nodejs npm
 apt install -y golang
 curl -sL https://deb.nodesource.com/setup_X.Y | sudo bash -
@@ -36,9 +36,12 @@ apt install -y libpcre3-dev
 apt update
 apt install -y php php-dev libphp-embed
 apt update
+echo "########################################################################################"
 apt install -y unit
-apt install -y unit-dev unit-go unit-jsc11 unit-jsc13 unit-jsc14 unit-perl unit-php unit-python2.7 unit-python3.8 unit-ruby
-apt install -y unit-dev unit-python2.7 unit-python3.8 
+apt install -y unit-dev unit-go unit-jsc11 unit-perl unit-php unit-python2.7 unit-python3.8 unit-ruby
+echo "########################################################################################"
+sleep 30
+#apt install -y unit-dev unit-python2.7 unit-python3.8 
 systemctl start unit
 mkdir -p /www/status
 chown unit:unit /www
