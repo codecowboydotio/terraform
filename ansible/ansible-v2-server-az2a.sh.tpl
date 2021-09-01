@@ -18,6 +18,7 @@ logger -p local0.info 'firstrun debug: starting--config'
 dnf -y install net-tools
 dnf -y install ansible
 ansible-galaxy collection install f5networks.f5_bigip
+git clone https://github.com/codecowboydotio/as3_workshop 
 echo "firstrun debug: finished-config"
 echo ${bigip_address} > /tmp/foo
 logger -p local0.info 'firstrun debug: finished-config'

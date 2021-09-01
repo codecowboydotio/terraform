@@ -37,6 +37,7 @@ data "aws_ami" "distro" {
 
   filter {
     name   = "name"
+    #values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04*"]
     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04*"]
   }
 
@@ -49,7 +50,7 @@ data "aws_ami" "distro" {
     values = ["x86_64"]
   }
 
-  # fedora owner
+  # ubuntu owner
   owners = [ "099720109477" ]
 }
 
