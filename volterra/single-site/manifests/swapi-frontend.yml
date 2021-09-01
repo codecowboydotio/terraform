@@ -34,7 +34,7 @@ spec:
           - name: STARSHIPS_API_APP_SERVER_URL
             value: "https://${starships_manifest_app_name}.${domain}"
           - name: PLANETS_API_APP_SERVER_URL
-            value: "http://10.1.1.150"
+            value: "https://${planets_manifest_app_name}.${domain}"
 ---
 apiVersion: v1
 kind: Service
