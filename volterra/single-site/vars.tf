@@ -14,10 +14,4 @@ variable "starships_manifest_app_name" { default = "svk-swapi-starships2" }
 variable "people_manifest_app_name" { default = "svk-swapi-people2" }
 variable "planets_manifest_app_name" { default = "svk-swapi-planets2" }
 
-variable "site_selector" { default = [ "ves.io/siteName in (ves-io-wes-sea, ves-io-ny8-nyc)" ] }
-
-variable "be-ns" { default = "s-vankalken-be" }
-variable "be_site_selector" { default = [ "ves.io/siteName in (ves-io-sg3-sin)"] }
-
-#variable "site_selector" { default = "ves.io/siteName in (ves-io-ny8-nyc, ves-io-wes-sea)" }
-#variable "app_name" { default = "svk-demo-app" }
+variable "site_selector" { default = [ "ves.io/siteName in (ves-io-sg3-sin)" ] }
