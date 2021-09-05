@@ -103,6 +103,7 @@ There is also a virtual kubernetes site, vk8s for short. This is associated with
 
 Virtual kubernetes is a kubernetes like API that allows me to run a virtual kubernetes deployment within the Volterra RE (Regional Edge) site. The virtual kubernetes site and API allows me to deploy pods and create services. This allows me to use standard kubernetes devices, such as manifests, and so on to deploy my applications.
 
+```
 resource "volterra_virtual_k8s" "vk8s" {
   name      = format("%s-vk8s", volterra_namespace.ns.name)
   namespace = volterra_namespace.ns.name
@@ -113,6 +114,9 @@ resource "volterra_virtual_k8s" "vk8s" {
     namespace = volterra_namespace.ns.name
   }
 }
+```
+
+
 
 ### API Discovery
 
