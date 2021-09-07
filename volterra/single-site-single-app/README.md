@@ -138,4 +138,42 @@ This associates this virtual kubernetes site with a volterra site. This is a ref
 
 ### API Discovery
 
+I have enabled API discovery - as the application I have deployed is an API.
 
+The mechanism to do this is to enable what we call an "application type". 
+The application type can be used to contain what we call "features". 
+Creating a custom one just makes it easier to handle later on.
+I have named it after my application (it makes sense).
+
+Each application type has a number of features. 
+I have enabled all of the features, but you can read more about them [here](https://www.volterra.io/docs/how-to/app-security/apiep-discovery-control?query=app%20type)
+
+```
+resource "volterra_app_type" "at" {
+  // This naming simplifies the 'mesh' cards
+  name      = var.manifest_app_name
+  namespace = "shared"
+  features {
+    type = "BUSINESS_LOGIC_MARKUP"
+  }
+  features {
+    type = "USER_BEHAVIOR_ANALYSIS"
+  }
+  features {
+    type = "PER_REQ_ANOMALY_DETECTION"
+  }
+  features {
+    type = "TIMESERIES_ANOMALY_DETECTION"
+  }
+  business_logic_markup_setting {
+    enable = true
+  }
+}
+```
+
+This essentially sets up a custom application type with all of the features enabled. 
+This will automatically create a card named after your app type when you deploy your application.
+
+### Load Balancer
+
+### Origin Pool
