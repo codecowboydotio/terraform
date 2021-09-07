@@ -91,11 +91,26 @@ The three important pieces here are:
 
 **Labels**
 
+This is a label that I can use to identify this particular object. This object is identified using the site name.
+
 **Site Selector**
+
+This is a selector that I can use to choose how I interact with other labels in the volterra world. I'm using the variable **site_selector** which maps to three volterra sites.
+
+```
+variable "site_selector" { default = [ "ves.io/siteName in (ves-io-sg3-sin, ves-io-ny8-nyc, ves-io-os1-osa)" ] }
+```
+
+This has the effect of choosing the three volterra sites when I deploy anything using this partcular site.
+
 
 **Site Type**
 
+The site type is the type of site I'm going to install.
+The allowed values here are **CUSTOMER_EDGE** or **REGIONAL_EDGE**.
+Regional edge means "in a volterra point of presence", and Customer Edge means "in your own point of presence".
 
+I have selected regional edge as it's less work, and means that I can be up and running quickly.
 
 ### Virtual Kubernetes
 
@@ -116,7 +131,11 @@ resource "volterra_virtual_k8s" "vk8s" {
 }
 ```
 
+The **vsite_refs** is the important part here. 
+This associates this virtual kubernetes site with a volterra site. This is a reference to another object within the Volterra system. In this case, we are associating the virtual site we created above with our virtual kubernetes instance.
+
 
 
 ### API Discovery
+
 

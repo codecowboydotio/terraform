@@ -1,13 +1,22 @@
 variable "ns" { default = "s-vankalken" }
-variable "domain" { default = "sa.f5demos.com" }
-variable "servicename" { default = "svk-swapi-api7" }
-variable "frontend_servicename" { default = "svk-swapi-frontend7" }
-variable "manifest_app_name" { default = "svk-swapi-api7" }
-variable "frontend_manifest_app_name" { default = "svk-swapi-frontend7" }
-variable "site_selector" { default = [ "ves.io/siteName in (ves-io-wes-sea, ves-io-ny8-nyc)" ] }
 
-variable "be-ns" { default = "s-vankalken-be" }
-variable "be_site_selector" { default = [ "ves.io/siteName in (ves-io-sg3-sin)"] }
+variable "name-prefix" { default = "svk" }
+variable "project" { default = "eks" }
+variable "aws_region" { default = "ap-southeast-2" }
 
-#variable "site_selector" { default = "ves.io/siteName in (ves-io-ny8-nyc, ves-io-wes-sea)" }
-#variable "app_name" { default = "svk-demo-app" }
+variable "cluster_name" {
+  type        = string
+  description = "EKS cluster name."
+  default = "svk-cluster"
+}
+
+variable "eks_vpc_cidr_block" {
+  default = "10.100.0.0/16"
+}
+variable "vpc-outside" {
+  default = "10.100.1.0/24"
+}
+variable "vpc-inside" {
+  default = "10.100.2.0/24"
+}
+
