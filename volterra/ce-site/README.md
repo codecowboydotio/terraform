@@ -91,26 +91,11 @@ The three important pieces here are:
 
 **Labels**
 
-This is a label that I can use to identify this particular object. This object is identified using the site name.
-
 **Site Selector**
-
-This is a selector that I can use to choose how I interact with other labels in the volterra world. I'm using the variable **site_selector** which maps to three volterra sites.
-
-```
-variable "site_selector" { default = [ "ves.io/siteName in (ves-io-sg3-sin, ves-io-ny8-nyc, ves-io-os1-osa)" ] }
-```
-
-This has the effect of choosing the three volterra sites when I deploy anything using this partcular site.
-
 
 **Site Type**
 
-The site type is the type of site I'm going to install.
-The allowed values here are **CUSTOMER_EDGE** or **REGIONAL_EDGE**.
-Regional edge means "in a volterra point of presence", and Customer Edge means "in your own point of presence".
 
-I have selected regional edge as it's less work, and means that I can be up and running quickly.
 
 ### Virtual Kubernetes
 
@@ -131,49 +116,7 @@ resource "volterra_virtual_k8s" "vk8s" {
 }
 ```
 
-The **vsite_refs** is the important part here. 
-This associates this virtual kubernetes site with a volterra site. This is a reference to another object within the Volterra system. In this case, we are associating the virtual site we created above with our virtual kubernetes instance.
-
 
 
 ### API Discovery
 
-I have enabled API discovery - as the application I have deployed is an API.
-
-The mechanism to do this is to enable what we call an "application type". 
-The application type can be used to contain what we call "features". 
-Creating a custom one just makes it easier to handle later on.
-I have named it after my application (it makes sense).
-
-Each application type has a number of features. 
-I have enabled all of the features, but you can read more about them [here](https://www.volterra.io/docs/how-to/app-security/apiep-discovery-control?query=app%20type)
-
-```
-resource "volterra_app_type" "at" {
-  // This naming simplifies the 'mesh' cards
-  name      = var.manifest_app_name
-  namespace = "shared"
-  features {
-    type = "BUSINESS_LOGIC_MARKUP"
-  }
-  features {
-    type = "USER_BEHAVIOR_ANALYSIS"
-  }
-  features {
-    type = "PER_REQ_ANOMALY_DETECTION"
-  }
-  features {
-    type = "TIMESERIES_ANOMALY_DETECTION"
-  }
-  business_logic_markup_setting {
-    enable = true
-  }
-}
-```
-
-This essentially sets up a custom application type with all of the features enabled. 
-This will automatically create a card named after your app type when you deploy your application.
-
-### Load Balancer
-
-### Origin Pool

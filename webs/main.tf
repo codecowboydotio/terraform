@@ -24,6 +24,7 @@ resource "aws_instance" "web-server" {
     Environment = "Demo"
     SupportTeam = "ANZSE"
     Contact     = "svk@example.com"
+    app_type    = "production"
   }
 
   provisioner "local-exec" {
