@@ -105,19 +105,3 @@ resource "aws_security_group" "vpc-a_allow_all" {
 #    Name = "${var.name-prefix}-${var.project}-eip-subnet_1"
 #  }
 #}
-#
-#resource "aws_eip" "subnet_3" {
-#  vpc = true
-#
-#  tags = {
-#    Name = "${var.name-prefix}-${var.project}-eip-subnet_3"
-#  }
-#}
-#
-#resource "aws_eip" "subnet_4" {
-#  vpc = true
-#
-#  tags = {
-#    Name = "${var.name-prefix}-${var.project}-eip-subnet_4"
-#  }
-#}
