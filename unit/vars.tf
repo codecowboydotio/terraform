@@ -10,6 +10,7 @@ variable "project" {
 variable "vpc-a_cidr_block" {
   default = "10.100.0.0/16"
 }
+
 variable "vpc-a_subnet_1" {
   default = "10.100.1.0/24"
 }
