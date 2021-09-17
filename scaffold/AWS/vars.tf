@@ -10,18 +10,16 @@ variable "project" {
 variable "vpc-a_cidr_block" {
   default = "10.100.0.0/16"
 }
-variable "vpc-a_subnet_1" {
-  default = "10.100.1.0/24"
+variable "vpc-a-subnets" {
+  type = map
+  default = {
+    vpc-a_subnet_1 = "10.100.1.0/24"  
+    vpc-a_subnet_2 = "10.100.2.0/24"  
+    vpc-a_subnet_3 = "10.100.3.0/24"  
+    vpc-a_subnet_4 = "10.100.4.0/24"  
+  }
 }
-variable "vpc-a_subnet_2" {
-  default = "10.100.2.0/24"
-}
-variable "vpc-a_subnet_3" {
-  default = "10.100.3.0/24"
-}
-variable "vpc-a_subnet_4" {
-  default = "10.100.4.0/24"
-}
+
 variable "key_name" {
   default = "svk-keypair-f5"
 }

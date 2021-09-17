@@ -18,61 +18,17 @@ resource "aws_vpc" "vpc-a" {
   }
 }
 
-resource "aws_subnet" "vpc-a_subnet_1" {
+resource "aws_subnet" "vpc-a_subnets" {
+  for_each = var.vpc-a-subnets
   vpc_id = aws_vpc.vpc-a.id
-  cidr_block = var.vpc-a_subnet_1
+  cidr_block = "${each.value}"
   availability_zone = "${var.aws_region}a"
   map_public_ip_on_launch = "true"
 
   tags = {
     for k, v in merge({
       app_type = "production"
-      Name = "${var.name-prefix}-${var.project}-vpc-a-subnet_1-tf"
-    },
-    var.default_ec2_tags): k => v
-  }
-}
-
-resource "aws_subnet" "vpc-a_subnet_2" {
-  vpc_id = aws_vpc.vpc-a.id
-  cidr_block = var.vpc-a_subnet_2
-  availability_zone = "${var.aws_region}a"
-  map_public_ip_on_launch = "true"
-
-  tags = {
-    for k, v in merge({
-      app_type = "production"
-      Name = "${var.name-prefix}-${var.project}-vpc-a-subnet_2-tf"
-    },
-    var.default_ec2_tags): k => v
-  }
-}
-
-resource "aws_subnet" "vpc-a_subnet_3" {
-  vpc_id = aws_vpc.vpc-a.id
-  cidr_block = var.vpc-a_subnet_3
-  availability_zone = "${var.aws_region}a"
-  map_public_ip_on_launch = "true"
-
-  tags = {
-    for k, v in merge({
-      app_type = "production"
-      Name = "${var.name-prefix}-${var.project}-vpc-a-subnet_3-tf"
-    },
-    var.default_ec2_tags): k => v
-  }
-}
-
-resource "aws_subnet" "vpc-a_subnet_4" {
-  vpc_id = aws_vpc.vpc-a.id
-  cidr_block = var.vpc-a_subnet_4
-  availability_zone = "${var.aws_region}a"
-  map_public_ip_on_launch = "true"
-
-  tags = {
-    for k, v in merge({
-      app_type = "production"
-      Name = "${var.name-prefix}-${var.project}-vpc-a-subnet_4-tf"
+      Name = "${var.name-prefix}-${var.project}-${each.key}-tf"
     },
     var.default_ec2_tags): k => v
   }
@@ -106,20 +62,14 @@ resource "aws_route_table" "vpc-a-route-table-tf" {
   }
 }
 
-resource "aws_route_table_association" "vpc-a_subnet_1" {
-  subnet_id = aws_subnet.vpc-a_subnet_1.id
-  route_table_id = aws_route_table.vpc-a-route-table-tf.id
+data "aws_subnet_ids" "all" {
+  vpc_id = aws_vpc.vpc-a.id
 }
-resource "aws_route_table_association" "vpc-a_subnet_2" {
-  subnet_id = aws_subnet.vpc-a_subnet_2.id
-  route_table_id = aws_route_table.vpc-a-route-table-tf.id
-}
-resource "aws_route_table_association" "vpc-a_subnet_3" {
-  subnet_id = aws_subnet.vpc-a_subnet_3.id
-  route_table_id = aws_route_table.vpc-a-route-table-tf.id
-}
-resource "aws_route_table_association" "vpc-a_subnet_4" {
-  subnet_id = aws_subnet.vpc-a_subnet_4.id
+
+
+resource "aws_route_table_association" "vpc-a_subnet_assocs" {
+  for_each = data.aws_subnet_ids.all.ids
+  subnet_id = each.value
   route_table_id = aws_route_table.vpc-a-route-table-tf.id
 }
 
@@ -147,26 +97,27 @@ resource "aws_security_group" "vpc-a_allow_all" {
     }
 }
 
-resource "aws_eip" "subnet_1" {
-  vpc = true
-
-  tags = {
-    Name = "${var.name-prefix}-${var.project}-eip-subnet_1"
-  }
-}
-
-resource "aws_eip" "subnet_3" {
-  vpc = true
-
-  tags = {
-    Name = "${var.name-prefix}-${var.project}-eip-subnet_3"
-  }
-}
-
-resource "aws_eip" "subnet_4" {
-  vpc = true
-
-  tags = {
-    Name = "${var.name-prefix}-${var.project}-eip-subnet_4"
-  }
-}
+## Not sure I actually need an EIP per subnet any more - but hey I'll leave the scaffold here for now
+#resource "aws_eip" "subnet_1" {
+#  vpc = true
+#
+#  tags = {
+#    Name = "${var.name-prefix}-${var.project}-eip-subnet_1"
+#  }
+#}
+#
+#resource "aws_eip" "subnet_3" {
+#  vpc = true
+#
+#  tags = {
+#    Name = "${var.name-prefix}-${var.project}-eip-subnet_3"
+#  }
+#}
+#
+#resource "aws_eip" "subnet_4" {
+#  vpc = true
+#
+#  tags = {
+#    Name = "${var.name-prefix}-${var.project}-eip-subnet_4"
+#  }
+#}
