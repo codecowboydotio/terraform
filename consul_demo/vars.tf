@@ -23,10 +23,10 @@ variable "bigip_port" {
   default = "8443"
 }
 variable "bigip_license" {
-  default = "HNJJN-ASCCT-BTHLI-RHMCF-LGSVZKR"
+  default = "TMRBG-JEDDE-UEGZM-CKVPX-NCAMTAR"
 }
 variable "bigiq_license" {
-  default = "VBQQV-BGDTPF-ELN-WPKQYFZ-ROSJYUS"
+  default = "SJXRW-JXXKGB-HAN-GNSBIUM-QVHUJKS"
 }
 variable "ami_linux_server" {
   default = "ami-001ccfbcf4a8e0814"

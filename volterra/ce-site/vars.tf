@@ -5,16 +5,16 @@ variable "aws_vpc_name" { default = "svk-volterra" }
 variable "aws_vpc_subnet" { default = "10.100.0.0/16" }
 variable "aws_az1_subnet" { default = "10.100.1.0/24" }
 
-variable "site_name" { default = "svk-tf" }
+variable "site_name" { default = "svk-tf3" }
 
-variable "ns" { default = "s-vankalken2" }
+variable "ns" { default = "s-vankalken3" }
 variable "domain_host" { default = "svk-unit-demo" }
 variable "domain" { default = "sa.f5demos.com" }
 variable "servicename" { default = "svk-unit" }
 variable "unit_config_port" { default = "8888" }
 
-variable "manifest_app_name" { default = "svk-swapi-api2" }
-variable "loadgen_manifest_app_name" { default = "svk-swapi-loadgen2" }
+#variable "manifest_app_name" { default = "svk-swapi-api" }
+#variable "loadgen_manifest_app_name" { default = "svk-swapi-loadgen" }
 
 variable "site_selector" { default = [ "ves.io/siteName in (ves-io-sg3-sin)" ] }
 

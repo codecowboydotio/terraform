@@ -102,7 +102,7 @@ resource "volterra_virtual_k8s" "vk8s" {
 }
 
 resource "volterra_api_credential" "cred" {
-  name      = "test-api-cred"
+  name      = var.servicename
   api_credential_type = "KUBE_CONFIG"
   virtual_k8s_namespace = volterra_namespace.ns.name
   virtual_k8s_name = volterra_virtual_k8s.vk8s.name
