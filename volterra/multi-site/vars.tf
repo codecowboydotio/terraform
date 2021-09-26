@@ -1,4 +1,4 @@
-variable "ns" { default = "s-vankalken" }
+variable "ns" { default = "svk" }
 
 variable "name-prefix" { default = "svk" }
 variable "project" { default = "eks" }

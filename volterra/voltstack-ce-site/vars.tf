@@ -5,9 +5,9 @@ variable "aws_vpc_name" { default = "svk-volterra" }
 variable "aws_vpc_subnet" { default = "10.100.0.0/16" }
 variable "aws_az1_subnet" { default = "10.100.1.0/24" }
 
-variable "site_name" { default = "svk-tf3" }
+variable "site_name" { default = "svk-tf" }
 
-variable "ns" { default = "s-vankalken3" }
+variable "ns" { default = "s-vankalken" }
 variable "domain_host" { default = "svk-unit-demo" }
 variable "domain" { default = "sa.f5demos.com" }
 variable "servicename" { default = "svk-unit" }
