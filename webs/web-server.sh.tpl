@@ -23,36 +23,10 @@ logger -p local0.info 'firstrun debug: starting--config'
 dnf -y install httpd
 dnf -y install unzip
 dnf -y install net-tools
-curl https://releases.hashicorp.com/consul/1.8.3/consul_1.8.3_linux_amd64.zip -o /root/consul_1.8.3_linux_amd64.zip
-unzip /root/consul_1.8.3_linux_amd64.zip -d /root/
-mkdir -p /etc/consul.d
-mkdir -p /var/log/consul
-cp -p /root/consul /usr/bin
-echo "consul agent -config-dir=/etc/consul.d -log-file=/var/log/consul/consul.log -data-dir=/tmp -join ${consul_address}" > /root/consul.sh
-chmod 755 /root/consul.sh
 git clone https://github.com/platzhersh/pacman-canvas /var/www/html/
 mv /var/www/html/index.htm /var/www/html/index.html
-cat << EOF > /etc/consul.d/web.json
-{
-  "service": {
-    "name": "web",
-    "tags": [
-      "webapp"
-    ],
-    "port": 80,
-    "check": {
-      "id": "service_check",
-      "name": "Check httpd health",
-      "service_id": "web_1",
-      "http": "http://localhost/",
-      "method": "GET",
-      "interval": "10s",
-      "timeout": "1s"
-    }
-  }
-}
-EOF
-/root/consul.sh &
 systemctl start httpd
+dnf -y install java-11-openjdk java-11-openjdk-devel
 echo "firstrun debug: finished-config"
+wget https://downloads.apache.org/tomcat/tomcat-10/v10.0.12/bin/apache-tomcat-10.0.12-fulldocs.tar.gz
 logger -p local0.info 'firstrun debug: finished-config'
