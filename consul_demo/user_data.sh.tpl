@@ -98,30 +98,20 @@ tmsh modify sys global-settings gui-setup disabled
 tmsh modify /sys http auth-pam-validate-ip off
 
 curl -L https://github.com/F5Networks/f5-appsvcs-extension/releases/download/v3.32.0/f5-appsvcs-3.32.0-4.noarch.rpm -o f5-appsvcs-3.32.0-4.noarch.rpm
-curl -L https://github.com/F5Networks/f5-telemetry-streaming/releases/download/v1.16.0/f5-telemetry-1.16.0-4.noarch.rpm -o f5-telemetry-1.16.0-4.noarch.rpm
-curl -L https://github.com/F5Networks/f5-declarative-onboarding/releases/download/v1.17.0/f5-declarative-onboarding-1.17.0-3.noarch.rpm-o f5-declarative-onboarding-1.17.0-3.noarch.rpm
+curl -L https://github.com/F5Networks/f5-telemetry-streaming/releases/download/v1.24.0/f5-telemetry-1.24.0-3.noarch.rpm -o f5-telemetry-1.24.0-3.noarch.rpm
 
 
-DATA="{\"operation\":\"INSTALL\",\"packageFilePath\":\"/var/config/rest/downloads/$FN\"}"
-curl -kvu $CREDS "https://$IP/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
-
-FN=f5-telemetry-1.16.0-4.noarch.rpm
+CREDS="admin:${bigip_password}"
+IP="127.0.0.1:8443"
+set -x
+FN=f5-telemetry-1.24.0-3.noarch.rpm
 LEN=$(wc -c $FN | awk 'NR==1{print $1}')
 curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
 DATA="{\"operation\":\"INSTALL\",\"packageFilePath\":\"/var/config/rest/downloads/$FN\"}"
 curl -kvu $CREDS "https://$IP/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
 
-FN=f5-declarative-onboarding-1.17.0-3.noarch.rpm
-LEN=$(wc -c $FN | cut -f 1 -d ' ')
-curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
-DATA="{\"operation\":\"INSTALL\",\"packageFilePath\":\"/var/config/rest/downloads/$FN\"}"
-curl -kvu $CREDS "https://$IP/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
-
-set -x
 sleep 60
 FN="f5-appsvcs-3.32.0-4.noarch.rpm"
-CREDS="admin:${bigip_password}"
-IP="127.0.0.1:8443"
 LEN=$(wc -c $FN | awk 'NR==1{print $1}')
 curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
 curl -kvu $CREDS https://$IP/mgmt/shared/file-transfer/uploads/$FN -H 'Content-Type: application/octet-stream' -H "Content-Range: 0-$((LEN - 1))/$LEN" -H "Content-Length: $LEN" -H 'Connection: keep-alive' --data-binary @$FN
