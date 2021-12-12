@@ -98,7 +98,7 @@ data:
     PrivateNIC: eth0
     SkipStages: ["osSetup", "etcd", "kubelet", "master", "voucher", "workload", "controlWorkload"]
     # CHANGE ME
-    Token: 2446d051-a8cd-4d61-a9dc-936fcaa7281f 
+    Token:  d4a989b5-346d-4dd9-a44d-c6a0f04ddc5a
     CertifiedHardware: k8s-minikube-voltmesh
 ---
 apiVersion: apps/v1
