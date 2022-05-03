@@ -5,7 +5,10 @@ variable "name-prefix" {
   default = "svk"
 }
 variable "project" {
-  default = "unit"
+  default = "kube"
+}
+variable "vm_count" {
+  default = 1
 }
 variable "vpc-a_cidr_block" {
   default = "10.100.0.0/16"

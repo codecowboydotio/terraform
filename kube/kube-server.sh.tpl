@@ -13,9 +13,10 @@ exec 2<&-
 exec 1<>$FILE
 exec 2>&1
 echo "firstrun debug: starting-config"
-useradd student
+useradd -m student
 echo "student:password" > userlist
 chpasswd < userlist
+echo "sudo su - " >> /home/student/.profile
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 systemctl restart sshd
 echo "student ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
@@ -84,5 +85,97 @@ spec:
   - name: port
     port: 80
     targetPort: 3000
+EOF
+
+cat << EOF > /root/app2.yaml
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app2-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app2-svc
+            port:
+              number: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svk-app2
+  labels:
+    app: svk-app2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: svk-app2
+  template:
+    metadata:
+      labels:
+        app: svk-app2
+    spec:
+      containers:
+      - image: public.ecr.aws/j7y3o1g8/demo
+        imagePullPolicy: IfNotPresent
+        name: svk-app2
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app2-svc
+  labels:
+    app: svk-app2
+spec:
+  selector:
+    app: svk-app2
+  ports:
+  - name: port
+    port: 80
+    targetPort: 80
+EOF
+cat << EOF > /root/commands.txt
+This file represents a list of commands to be used in conjunction with the slides 
+
+
+kubectl get nodes
+
+kubectl describe nodes | more
+
+kubectl apply -f swapi.yaml
+
+kubectl get pods
+
+kubectl get all
+
+cat swapi.yaml
+
+kubectl get pods
+
+kubectl delete pod <insert pod name>
+
+kubectl get pods
+
+curl http://httpbin.org/ip
+
+kubectl delete -f swapi.yaml
+
+kubectl get all
+
+kubectl apply -f app2.yaml
+
+kubectl get all
+
+
+curl http://httpbin.org/ip
+
 EOF
 echo "done"

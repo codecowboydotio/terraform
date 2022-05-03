@@ -24,7 +24,7 @@ variable "vpc-a_subnet_4" {
   default = "10.100.4.0/24"
 }
 variable "key_name" {
-  default = "svk-keypair-f5"
+  default = "svk_keypair"
 }
 variable "instance_type_linux_server" {
   default = "t2.micro"
