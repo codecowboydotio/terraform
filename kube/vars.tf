@@ -21,11 +21,18 @@ variable "key_name" {
   default = "svk-key"
 }
 variable "instance_type_linux_server" {
-  default = "t2.xlarge"
+  default = "m4.2xlarge"
 }
 variable "linux_server_pkgs" {
   default = ["foo"]
 }
+variable "win_username" {
+  default = "tester"
+}
+variable "win_password" {
+  default = "Azfg45jb12"
+}
+
 
 data "aws_ami" "distro" {
   most_recent = true
@@ -47,5 +54,27 @@ data "aws_ami" "distro" {
 
   # ubuntu owner
   owners = [ "099720109477" ]
+}
+
+data "aws_ami" "windows" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    #values = ["Windows_Server-2019-English-Full-HyperV-2022.03.09"]
+    values = ["Windows_Server-2022-English-Core-ContainersLatest-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  # ami owner
+  owners = [ "801119661308" ]
 }
 

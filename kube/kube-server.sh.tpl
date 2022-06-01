@@ -13,14 +13,15 @@ exec 2<&-
 exec 1<>$FILE
 exec 2>&1
 echo "firstrun debug: starting-config"
-useradd -m student
+useradd -m student -s /bin/bash
 echo "student:password" > userlist
 chpasswd < userlist
 echo "sudo su - " >> /home/student/.profile
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 systemctl restart sshd
 echo "student ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-snap install microk8s --classic
+##snap install microk8s --classic
+snap install microk8s --classic --channel=1.19/stable
 microk8s start
 microk8s status
 microk8s enable dashboard dns registry ingress
@@ -178,4 +179,30 @@ kubectl get all
 curl http://httpbin.org/ip
 
 EOF
+
+cat << EOF > /root/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Find the latest tag here: https://github.com/ansible/awx-operator/releases
+  - github.com/ansible/awx-operator/config/default?ref=0.20.2
+
+# Set the image tags to match the git version from above
+images:
+  - name: quay.io/ansible/awx-operator
+    newTag: 0.20.2
+
+# Specify a custom namespace in which to install AWX
+namespace: awx
+EOF
+cd /usr/bin
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+
+#curl -LO https://storage.googleapis.com/minikube/releases/v1.23.2/minikube-linux-amd64
+#sudo install minikube-linux-amd64 /usr/local/bin/minikube
+#sudo apt install apt-transport-https ca-certificates curl software-properties-common
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+#sudo apt install -y docker-ce
+#usermod -aG docker student
 echo "done"
