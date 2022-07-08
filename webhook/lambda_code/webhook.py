@@ -7,15 +7,25 @@ logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     raw_event = event['body']
+    uri_path = event['path'].strip("/")
     logger.info(event['body'])
     json_event = json.loads(raw_event)
     logger.info(type(json_event))
+    logger.info('URI Path: %s', uri_path)
     logger.info('Category: %s', json_event['category'])
     logger.info('Cloud Provider: %s', json_event['cloud_provider'])
     logger.info('Account Name: %s', json_event['account_name'])
     logger.info('Alert ID: %s', json_event['state']['alert_id'])
     logger.info('Severity: %s', json_event['state']['severity'])
+
+
+    # At this point I can take the path variable uri_path and write the alert to a bucket that is for a
+    # specific customer or whatever the case may be.
       
+
+    # In the event that you want to POST the data to either an authenticated or unauthenticated API
+    # You would invoke something like below
+
     # Let's do a POST to an external API endpoint with data
     # defining the api-endpoint 
     API_ENDPOINT = "https://webhook-worker.scottvankalken.workers.dev/"

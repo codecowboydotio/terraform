@@ -1,6 +1,14 @@
 resource "aws_api_gateway_rest_api" "orca" {
   name = "Orca-Webhook"
   description = "orca webhook example"
+
+  tags = {
+    for k, v in merge({
+      app_type = "production"
+      Name = "${var.name-prefix}-${var.project}-bucket"
+    },
+    var.default_ec2_tags): k => v
+  }
 }
 
 resource "aws_api_gateway_resource" "proxy" {
