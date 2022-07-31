@@ -18,7 +18,7 @@ variable "vpc-a_subnet_1" {
   default = "10.100.1.0/24"
 }
 variable "key_name" {
-  default = "svk-key"
+  default = "svk_keypair"
 }
 variable "instance_type_linux_server" {
   default = "m4.2xlarge"
