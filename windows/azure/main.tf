@@ -58,7 +58,8 @@ resource "azurerm_windows_virtual_machine" "test" {
   name                = "${var.name-prefix}-${var.project}-vm"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_D8_v3"
+  size                = "Standard_B1s"
+  #size                = "Standard_D8_v3"
   admin_username      = "adminuser"
   admin_password      = "P@$$w0rd1234!"
   network_interface_ids = [
