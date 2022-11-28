@@ -12,7 +12,7 @@ resource "aws_instance" "unit-server" {
   tags = {
     for k, v in merge({
       app_type = "unit"
-      Name = "svk-unit-server"
+      Name = "${var.name-prefix}-${var.project}-server"
     },
     var.default_ec2_tags): k => v
   }

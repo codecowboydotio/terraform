@@ -83,3 +83,6 @@ output "windows_external" {
   value = azurerm_public_ip.public_ip.ip_address
 }
 
+output "external" {
+  value = azurerm_public_ip.public_ip
+}

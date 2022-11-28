@@ -1,0 +1,28 @@
+{
+                "listeners": {
+                        "*:8080": {
+                                "pass": "applications/golang"
+                        },
+                        "*:80": {
+                                "pass": "routes"
+                        }
+                },
+
+                "routes": [
+                        {
+                                "action": {
+                                        "share": "/www/status/"
+                                }
+                        }
+                ],
+                "applications": {
+                  "golang": {
+                    "type": "external",
+                    "working_directory": "/www/go-rest-api",
+                    "executable": "/www/go-rest-api/go-rest-api",
+                    "user": "root",
+                    "group": "root"
+                  }
+                }
+}
+
