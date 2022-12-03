@@ -44,7 +44,7 @@ EOF
 cat << EOF > /etc/consul.d/server.hcl
 bootstrap = true
 server = true
-datacenter = "dc1"
+datacenter = "awsdc"
 data_dir = "/var/consul"
 log_level = "INFO"
 node_name = "server-node"
