@@ -103,13 +103,13 @@ pip install gitpython
 echo "<p>Installed Unit GIT API pre-requisites</p>" >> /apps/status/index.html
 #git clone http://github.com/codecowboydotio/git-pull-api /apps/git-pull-api
 #echo "<p>Cloned Unit GIT API</p>" >> /apps/status/index.html
-echo "<p>FINISHED</p>" >> /apps/status/index.html
 pkill unitd
 MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}' | head -1)
-unitd --modules /usr/lib/unit/modules --control $MY_IP:8888
+unitd --modules /usr/lib/unit/modules --control 0.0.0.0:8888
 cd /apps
 #git clone http://github.com/codecowboydotio/go-rest-api
-git clone -b rel-0.1 https://github.com/project-tetsuo/project-tetsuo
+git clone -b rel-0.3 https://github.com/project-tetsuo/project-tetsuo
+echo "<p>Cloned TETSUO</p>" >> /apps/status/index.html
 cd /apps/project-tetsuo/go-rest-api
 export GO111MODULE=on
 rm -rf go.mod
@@ -125,25 +125,17 @@ echo "running go get"
 go get
 echo "running go build"
 go build
+echo "<p>built go api</p>" >> /apps/status/index.html
 ls -la
 curl -X PUT --data-binary '{
         "listeners": {
                 "*:8080": {
                         "pass": "applications/tetsuo"
                 },
-                "*:80": {
-                        "pass": "routes"
+                "*:8181": {
+                        "pass": "applications/config-app"
                 }
         },
-
-        "routes": [
-                {
-                     "action": {
-                         "share": "/apps/pacman-unit/"
-                        }
-                }
-        ],
-
 
         "applications": {
                 "tetsuo": {
@@ -154,8 +146,16 @@ curl -X PUT --data-binary '{
                                 "version": "2.0",
                                 "git_repo": "https://github.com/codecowboydotio/git-pull-api"
                         }
+                },
+		"config-app": {
+                        "type": "python",
+                        "path": "/apps/project-tetsuo/config-api",
+                        "working_directory": "/apps/project-tetsuo/config-api",
+                        "module": "wsgi",
+                        "callable": "app"
                 }
         }
 }' http://$MY_IP:8888/config
-
+echo "<p>Applied tetsuo config</p>" >> /apps/status/index.html
+echo "<p>FINISHED</p>" >> /apps/status/index.html
 echo "firstrun debug: finished-config"
