@@ -100,6 +100,7 @@ apt install -y python3-pip python3
 pip install flask
 pip install flasgger
 pip install gitpython
+pip install gunicorn
 echo "<p>Installed Unit GIT API pre-requisites</p>" >> /apps/status/index.html
 #git clone http://github.com/codecowboydotio/git-pull-api /apps/git-pull-api
 #echo "<p>Cloned Unit GIT API</p>" >> /apps/status/index.html
