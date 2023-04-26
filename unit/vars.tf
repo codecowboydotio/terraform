@@ -27,7 +27,7 @@ variable "key_name" {
   default = "svk_keypair"
 }
 variable "instance_type_linux_server" {
-  default = "t2.xlarge"
+  default = "t2.small"
 }
 variable "linux_server_pkgs" {
   default = ["foo"]

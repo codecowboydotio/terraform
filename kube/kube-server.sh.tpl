@@ -205,4 +205,6 @@ curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack
 #sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 #sudo apt install -y docker-ce
 #usermod -aG docker student
+
+kubectl apply -f /root/swapi.yaml
 echo "done"

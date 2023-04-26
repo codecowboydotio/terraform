@@ -74,3 +74,6 @@ resource "aws_lambda_permission" "apigw" {
 output "base_url" {
   value = aws_api_gateway_deployment.orca.invoke_url
 }
+output "url" {
+  value = aws_api_gateway_deployment.orca.*
+}

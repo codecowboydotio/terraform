@@ -11,6 +11,14 @@ resource "aws_s3_bucket" "lambda_bucket" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_acl" "lambda_bucket" {
   bucket = aws_s3_bucket.lambda_bucket.id
   acl    = "private"

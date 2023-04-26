@@ -101,17 +101,22 @@ pip install flask
 pip install flasgger
 pip install gitpython
 pip install gunicorn
+pip install flask-cors
 echo "<p>Installed Unit GIT API pre-requisites</p>" >> /apps/status/index.html
 #git clone http://github.com/codecowboydotio/git-pull-api /apps/git-pull-api
 #echo "<p>Cloned Unit GIT API</p>" >> /apps/status/index.html
 pkill unitd
+mkdir /home/unit
+chown unit:unit /home/unit
+usermod -d /home/unit unit
+usermod -s /bin/bash unit
 MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}' | head -1)
-unitd --modules /usr/lib/unit/modules --control 0.0.0.0:8888
+unitd --modules /usr/lib/unit/modules --control 0.0.0.0:8888 --user root --group root --group root
 cd /apps
 #git clone http://github.com/codecowboydotio/go-rest-api
-git clone -b rel-0.3 https://github.com/project-tetsuo/project-tetsuo
+git clone -b rel-0.7 https://github.com/tetsuo-dev/tetsuo.dev-code
 echo "<p>Cloned TETSUO</p>" >> /apps/status/index.html
-cd /apps/project-tetsuo/go-rest-api
+cd /apps/tetsuo.dev-code/go-rest-api
 export GO111MODULE=on
 rm -rf go.mod
 sleep 5
@@ -127,7 +132,8 @@ go get
 echo "running go build"
 go build
 echo "<p>built go api</p>" >> /apps/status/index.html
-ls -la
+
+chown -R unit:unit /apps
 curl -X PUT --data-binary '{
         "listeners": {
                 "*:8080": {
@@ -135,14 +141,49 @@ curl -X PUT --data-binary '{
                 },
                 "*:8181": {
                         "pass": "applications/config-app"
-                }
+                },
+                "*:81": {
+                             "pass": "routes"
+                        }
         },
+
+        "routes": [
+                {
+                        "match": {
+                                "uri": "/ui3*"
+                        },
+
+                        "action": {
+                                "share": "/apps/tetsuo.dev-code/ui3/index.html"
+                        }
+                },
+                {
+                        "match": {
+                            "uri": "/ui*"
+                        },
+
+                        "action": {
+                                "share": "/apps/tetsuo.dev-code/ui/index.html"
+                        }
+                },
+                {
+                        "match": {
+                            "uri": "/api*"
+                        },
+
+                        "action": {
+                                "pass": "applications/tetsuo"
+                        }
+                },
+        ],
 
         "applications": {
                 "tetsuo": {
                         "type": "external",
-                        "working_directory": "/apps/project-tetsuo/go-rest-api",
-                        "executable": "/apps/project-tetsuo/go-rest-api/go-rest-api",
+                        "working_directory": "/apps/tetsuo.dev-code/go-rest-api",
+                        "executable": "/apps/tetsuo.dev-code/go-rest-api/go-rest-api",
+                        "user": "unit",
+                        "group": "unit",
                         "environment": {
                                 "version": "2.0",
                                 "git_repo": "https://github.com/codecowboydotio/git-pull-api"
@@ -150,8 +191,8 @@ curl -X PUT --data-binary '{
                 },
 		"config-app": {
                         "type": "python",
-                        "path": "/apps/project-tetsuo/config-api",
-                        "working_directory": "/apps/project-tetsuo/config-api",
+                        "path": "/apps/tetsuo.dev-code/config-api",
+                        "working_directory": "/apps/tetsuo.dev-code/config-api",
                         "module": "wsgi",
                         "callable": "app"
                 }

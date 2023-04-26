@@ -11,7 +11,7 @@ resource "azurerm_network_security_group" "consul_nsg" {
   resource_group_name	= azurerm_resource_group.rg.name
 
     security_rule {
-    name                       = "Allow all"
+    name                       = "Allow_all"
     priority                   = 1001
     direction                  = "Inbound"
     access                     = "Allow"
