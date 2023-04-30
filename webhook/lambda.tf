@@ -26,6 +26,13 @@ resource "aws_lambda_function" "orca_webhook" {
   source_code_hash = data.archive_file.python_lambda.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+  layers = ["${aws_lambda_layer_version.orca_webhook_layer.arn}"]
+}
+
+resource "aws_lambda_layer_version" "orca_webhook_layer" {
+  filename = "lib/layer.zip"
+  layer_name = "webhook-layer"
+  compatible_runtimes = ["python3.7"]
 }
 
 resource "aws_cloudwatch_log_group" "orca_webhook" {
