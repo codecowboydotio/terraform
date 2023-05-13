@@ -97,7 +97,8 @@ echo "<p>Installed ansible</p>" >> /apps/status/index.html
 systemctl stop apache2
 echo "<p>stopped default apache server</p>" >> /apps/status/index.html
 apt install -y python3-pip python3
-pip install flask
+pip install Flask==2.2.3 
+#pip install flask
 pip install flasgger
 pip install gitpython
 pip install gunicorn

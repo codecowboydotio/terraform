@@ -21,14 +21,14 @@ sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_
 systemctl restart sshd
 echo "student ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 ##snap install microk8s --classic
-snap install microk8s --classic --channel=1.19/stable
-microk8s start
-microk8s status
-microk8s enable dashboard dns registry ingress
+#snap install microk8s --classic --channel=1.19/stable
+#microk8s start
+#microk8s status
+#microk8s enable dashboard dns registry ingress
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod 755 kubectl
 mv kubectl /usr/bin
-microk8s config > /root/kubeconfig
+#microk8s config > /root/kubeconfig
 cd /root/
 mkdir /root/.kube
 cp /root/kubeconfig /root/.kube/config
@@ -198,13 +198,14 @@ EOF
 cd /usr/bin
 curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 
-#curl -LO https://storage.googleapis.com/minikube/releases/v1.23.2/minikube-linux-amd64
-#sudo install minikube-linux-amd64 /usr/local/bin/minikube
-#sudo apt install apt-transport-https ca-certificates curl software-properties-common
-#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-#sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-#sudo apt install -y docker-ce
-#usermod -aG docker student
+curl -LO https://storage.googleapis.com/minikube/releases/v1.23.2/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo apt install -y docker-ce
+usermod -aG docker student
+usermod -aG docker ubuntu
 
 kubectl apply -f /root/swapi.yaml
 echo "done"
