@@ -1,5 +1,7 @@
 #!/bin/bash
 
+UNIT_VERSION="1.30.0-1~lunar"
+
 FILE=/tmp/firstrun.log
 if [ ! -e $FILE ]
 then
@@ -13,12 +15,13 @@ exec 2<&-
 exec 1<>$FILE
 exec 2>&1
 echo "firstrun debug: starting-config"
-curl -sL https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+sudo curl --output /usr/share/keyrings/nginx-keyring.gpg  \
+      https://unit.nginx.org/keys/nginx-keyring.gpg
 cat << EOF >  /etc/apt/sources.list.d/unit.list
-deb https://packages.nginx.org/unit/ubuntu/ jammy unit
-deb-src https://packages.nginx.org/unit/ubuntu/ jammy unit
+deb [signed-by=/usr/share/keyrings/nginx-keyring.gpg] https://packages.nginx.org/unit/ubuntu/ lunar unit
+deb-src [signed-by=/usr/share/keyrings/nginx-keyring.gpg] https://packages.nginx.org/unit/ubuntu/ lunar unit
 EOF
-apt-update
+apt update
 apt install -y build-essential libcap2-bin net-tools jq
 apt install -y nodejs npm
 curl -sL https://deb.nodesource.com/setup_X.Y | sudo bash -
@@ -26,23 +29,40 @@ apt install -y nodejs
 npm install -g node-gyp
 apt install -y php-dev libphp-embed
 apt install -y libperl-dev
-apt install -y python-dev
+apt install -y python-dev-is-python3
 apt install -y ruby-dev
 apt install -y openjdk-X-jdk
 apt install -y libssl-dev
 apt install -y libpcre2-dev
 apt install -y libpcre3-dev
 apt install -y golang-go
+apt install -y python-is-python3
 apt update
 apt install -y php php-dev libphp-embed
 apt update
-curl -L https://go.dev/dl/go1.19.linux-amd64.tar.gz -o /tmp/go1.19.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go1.19.linux-amd64.tar.gz
+#curl -L https://go.dev/dl/go1.19.linux-amd64.tar.gz -o /tmp/go1.19.linux-amd64.tar.gz
+curl -L https://go.dev/dl/go1.20.4.linux-amd64.tar.gz -o /tmp/go1.20.4.linux-amd64.tar.gz
+tar -C /usr/local -xzf /tmp/go1.20.4.linux-amd64.tar.gz
 
 export PATH=$PATH:/usr/local/go/bin
 echo "########################################################################################"
-apt install -y unit
-apt install -y unit-dev unit-go unit-jsc11 unit-perl unit-php unit-python2.7 unit-python3.10 unit-ruby
+apt install -y unit=$UNIT_VERSION
+echo "########################################################################################"
+apt install -y unit-dev=$UNIT_VERSION
+apt install -y unit-go=$UNIT_VERSION
+apt install -y unit-jsc11=$UNIT_VERSION
+apt install -y unit-jsc17=$UNIT_VERSION
+apt install -y unit-jsc18=$UNIT_VERSION
+apt install -y unit-jsc19=$UNIT_VERSION
+apt install -y unit-jsc20=$UNIT_VERSION
+apt install -y unit-perl=$UNIT_VERSION
+apt install -y unit-php=$UNIT_VERSION
+apt install -y unit-python3.11 
+apt install -y unit-ruby
+apt install -y unit-python3.11
+#apt install -y unit-dev
+#apt install -y unit-go
+sudo systemctl restart unit
 echo "########################################################################################"
 sleep 30
 systemctl start unit
@@ -73,49 +93,34 @@ curl -X PUT --data-binary '{
 }' --unix-socket /var/run/control.unit.sock http://localhost/config/
 apt install -y docker.io
 echo "<p>installed docker runtime...</p>" >> /apps/status/index.html
-#git clone https://github.com/codecowboydotio/dockerfiles
-#echo "<p>cloned dockerfiles...</p>" >> /apps/status/index.html
-#cd dockerfiles/swapi-json
-#docker build . --tag=swapi
-#echo "<p>built swapi-json container image...</p>" >> /apps/status/index.html
-#docker run -d -p 3000:3000 swapi
-#echo "<p>deployed container image...</p>" >> /apps/status/index.html
-#git clone https://github.com/codecowboydotio/helloworld-java /apps/jsp
-#echo "<p>cloned jsp...</p>" >> /apps/status/index.html
 apt install -y nodejs npm
 echo "<p>installed node and npm</p>" >> /apps/status/index.html
-apt install -y ansible
-echo "<p>Installed ansible</p>" >> /apps/status/index.html
-#git clone http://github.com/codecowboydotio/swapi-vue /apps/swapi-vue
-#echo "<p>Cloned swapi-vue</p>" >> /apps/status/index.html
-#cd /apps/swapi-vue
-#npm install -g @vue/cli
-#echo "<p>installed vue cli</p>" >> /apps/status/index.html
-#npm i @vue/cli-service
-#echo "<p>installed cli service</p>" >> /apps/status/index.html
-#sed -i 's/10.1.1.150/api.svkcode.org/g' /apps/swapi-vue/src/components/*.vue
+##apt install -y ansible
+##echo "<p>Installed ansible</p>" >> /apps/status/index.html
 systemctl stop apache2
 echo "<p>stopped default apache server</p>" >> /apps/status/index.html
+echo "################"
+echo "Performing app installations"
 apt install -y python3-pip python3
-pip install Flask==2.2.3 
-#pip install flask
-pip install flasgger
-pip install gitpython
-pip install gunicorn
-pip install flask-cors
+apt install -y python3-flask-2.2.3
+apt install -y python3-flasgger
+apt install -y python3-git
+apt install -y gunicorn
+apt install -y python3-flask-cors
+apt install -y python3-flask-restful
 echo "<p>Installed Unit GIT API pre-requisites</p>" >> /apps/status/index.html
-#git clone http://github.com/codecowboydotio/git-pull-api /apps/git-pull-api
-#echo "<p>Cloned Unit GIT API</p>" >> /apps/status/index.html
+echo "################"
+echo "Unit pre-reqs done, moving to app install"
 pkill unitd
 mkdir /home/unit
 chown unit:unit /home/unit
 usermod -d /home/unit unit
 usermod -s /bin/bash unit
 MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}' | head -1)
-unitd --modules /usr/lib/unit/modules --control 0.0.0.0:8888 --user root --group root --group root
+unitd --modulesdir /usr/lib/unit/modules --control 0.0.0.0:8888 --user root --group root --group root
 cd /apps
-#git clone http://github.com/codecowboydotio/go-rest-api
-git clone -b rel-0.7 https://github.com/tetsuo-dev/tetsuo.dev-code
+#git clone -b rel-0.7 https://github.com/tetsuo-dev/tetsuo.dev-code
+git clone -b rel-0.8 https://github.com/tetsuo-dev/tetsuo.dev-code
 echo "<p>Cloned TETSUO</p>" >> /apps/status/index.html
 cd /apps/tetsuo.dev-code/go-rest-api
 export GO111MODULE=on
@@ -135,6 +140,7 @@ go build
 echo "<p>built go api</p>" >> /apps/status/index.html
 
 chown -R unit:unit /apps
+set -x
 curl -X PUT --data-binary '{
         "listeners": {
                 "*:8080": {
@@ -179,16 +185,12 @@ curl -X PUT --data-binary '{
         ],
 
         "applications": {
-                "tetsuo": {
-                        "type": "external",
-                        "working_directory": "/apps/tetsuo.dev-code/go-rest-api",
-                        "executable": "/apps/tetsuo.dev-code/go-rest-api/go-rest-api",
-                        "user": "unit",
-                        "group": "unit",
-                        "environment": {
-                                "version": "2.0",
-                                "git_repo": "https://github.com/codecowboydotio/git-pull-api"
-                        }
+		"tetsuo": {
+                        "type": "python",
+                        "path": "/apps/tetsuo.dev-code/git-api",
+                        "working_directory": "/apps/tetsuo.dev-code/git-api",
+                        "module": "wsgi",
+                        "callable": "app"
                 },
 		"config-app": {
                         "type": "python",
@@ -198,7 +200,7 @@ curl -X PUT --data-binary '{
                         "callable": "app"
                 }
         }
-}' http://$MY_IP:8888/config
+}' http://127.0.0.1:8888/config
 echo "<p>Applied tetsuo config</p>" >> /apps/status/index.html
 echo "<p>FINISHED</p>" >> /apps/status/index.html
 echo "firstrun debug: finished-config"

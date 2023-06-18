@@ -27,7 +27,7 @@ variable "key_name" {
   default = "svk_keypair"
 }
 variable "instance_type_linux_server" {
-  default = "t2.small"
+  default = "t2.xlarge"
 }
 variable "linux_server_pkgs" {
   default = ["foo"]
@@ -40,7 +40,8 @@ data "aws_ami" "distro" {
     name   = "name"
     #values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04*"]
     #values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04*"]
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04*"]
+    #values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-lunar-23.04*"]
   }
 
   filter {
