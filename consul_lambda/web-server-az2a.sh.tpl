@@ -55,6 +55,7 @@ cat << EOF > /etc/consul.d/web.json
   }
 }
 EOF
+echo "datacenter = \"awsdc\"" >> /etc/consul.d/consul.hcl
 nohup /root/consul.sh &
 echo "firstrun debug: finished-config"
 logger -p local0.info 'firstrun debug: finished-config'

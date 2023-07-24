@@ -56,7 +56,7 @@ log_file = "/var/log/consul/consul.log"
 connect = {
   enabled = true
   enable_mesh_gateway_wan_federation = true
-  enable_serverless_plugin = true
+#  enable_serverless_plugin = true
 }
 EOF
 systemctl start consul.service
