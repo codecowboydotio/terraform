@@ -11,7 +11,7 @@ variable "name-prefix" {
   default = "svk"
 }
 variable "project" {
-  default = "scaffold"
+  default = "consul-cross-dc"
 }
 variable "vpc-a_cidr_block" {
   default = "10.100.0.0/16"

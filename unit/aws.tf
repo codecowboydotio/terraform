@@ -1,5 +1,5 @@
 provider "aws" {
-  profile = "default"
+#  profile = "default"
   region  = var.aws_region
 }
 
@@ -145,6 +145,25 @@ resource "aws_security_group" "vpc-a_allow_all" {
       },
       var.default_ec2_tags): k => v
     }
+}
+
+resource "aws_ec2_transit_gateway" "unit-tgw" {
+  description = "${var.name-prefix}-${var.project}-tgw-tf"
+  auto_accept_shared_attachments = "enable"
+  multicast_support = "enable"
+  default_route_table_association = "enable"
+  tags = {
+    Name = "${var.name-prefix}-${var.project}-tgw-tf"
+  }
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc1-attachment" {
+  subnet_ids         = [aws_subnet.vpc-a_subnet_1.id]
+  transit_gateway_id = aws_ec2_transit_gateway.unit-tgw.id
+  vpc_id             = aws_vpc.vpc-a.id
+  tags = {
+    "Name" = "transit-gateway-attachment1"
+  }
 }
 
 #resource "aws_eip" "subnet_1" {

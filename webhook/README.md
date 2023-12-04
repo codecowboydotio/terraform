@@ -11,3 +11,8 @@ The terraform template will create the following resources:
 - AWS API gateway
 - Lambda function
 
+
+## What to update
+Look at the vars.tf file and change the resion - by default will deploy into the ap-southeast-2 region.
+
+

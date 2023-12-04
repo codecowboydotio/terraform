@@ -91,12 +91,10 @@ curl -X PUT --data-binary '{
                 }
         ]
 }' --unix-socket /var/run/control.unit.sock http://localhost/config/
-apt install -y docker.io
-echo "<p>installed docker runtime...</p>" >> /apps/status/index.html
+##apt install -y docker.io
+##echo "<p>installed docker runtime...</p>" >> /apps/status/index.html
 apt install -y nodejs npm
 echo "<p>installed node and npm</p>" >> /apps/status/index.html
-##apt install -y ansible
-##echo "<p>Installed ansible</p>" >> /apps/status/index.html
 systemctl stop apache2
 echo "<p>stopped default apache server</p>" >> /apps/status/index.html
 echo "################"
@@ -120,8 +118,9 @@ MY_IP=$(ip -br addr | grep eth0 | awk '{print $3}' | awk -F"/" '{print $1}' | he
 unitd --modulesdir /usr/lib/unit/modules --control 0.0.0.0:8888 --user root --group root --group root
 cd /apps
 #git clone -b rel-0.7 https://github.com/tetsuo-dev/tetsuo.dev-code
-git clone -b rel-0.8 https://github.com/tetsuo-dev/tetsuo.dev-code
+git clone -b rel-0.9 https://github.com/tetsuo-dev/tetsuo.dev-code
 echo "<p>Cloned TETSUO</p>" >> /apps/status/index.html
+######### BUILD GOLANG MODULES###########
 cd /apps/tetsuo.dev-code/go-rest-api
 export GO111MODULE=on
 rm -rf go.mod
@@ -138,6 +137,9 @@ go get
 echo "running go build"
 go build
 echo "<p>built go api</p>" >> /apps/status/index.html
+######### BUILD NPM MODULES###########
+cd /apps/tetsuo.dev-code/multicast-sync
+npm i
 
 chown -R unit:unit /apps
 set -x
@@ -145,6 +147,9 @@ curl -X PUT --data-binary '{
         "listeners": {
                 "*:8080": {
                         "pass": "applications/tetsuo"
+                },
+                "*:3000": {
+                        "pass": "applications/sync"
                 },
                 "*:8181": {
                         "pass": "applications/config-app"
@@ -198,6 +203,22 @@ curl -X PUT --data-binary '{
                         "working_directory": "/apps/tetsuo.dev-code/config-api",
                         "module": "wsgi",
                         "callable": "app"
+                },
+                "sync": {
+                       "type": "external",
+                       "working_directory": "/apps/tetsuo.dev-code/multicast-sync",
+                       "executable": "/usr/bin/env",
+                       "stdout": "/tmp/sync.out",
+                       "stderr": "/tmp/sync_err.log",
+                       "arguments": [
+                           "node",
+                           "--experimental-modules",
+                           "--loader",
+                           "unit-http/loader.mjs",
+                           "--require",
+                           "unit-http/loader",
+                           "sync.js"
+                       ]
                 }
         }
 }' http://127.0.0.1:8888/config
