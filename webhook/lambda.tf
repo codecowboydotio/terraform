@@ -20,7 +20,7 @@ resource "aws_lambda_function" "orca_webhook" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.python_lambda.key
 
-  runtime = "python3.7"
+  runtime = "python3.8"
   handler = "webhook.lambda_handler"
 
   source_code_hash = data.archive_file.python_lambda.output_base64sha256

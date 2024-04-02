@@ -5,7 +5,7 @@ resource "aws_api_gateway_rest_api" "orca" {
   tags = {
     for k, v in merge({
       app_type = "production"
-      Name = "${var.name-prefix}-${var.project}-bucket"
+      Name = "${var.name-prefix}-${var.project}-bucket-a"
     },
     var.default_ec2_tags): k => v
   }

@@ -180,24 +180,6 @@ curl http://httpbin.org/ip
 
 EOF
 
-cat << EOF > /root/kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  # Find the latest tag here: https://github.com/ansible/awx-operator/releases
-  - github.com/ansible/awx-operator/config/default?ref=0.20.2
-
-# Set the image tags to match the git version from above
-images:
-  - name: quay.io/ansible/awx-operator
-    newTag: 0.20.2
-
-# Specify a custom namespace in which to install AWX
-namespace: awx
-EOF
-cd /usr/bin
-curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
-
 curl -LO https://storage.googleapis.com/minikube/releases/v1.23.2/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
@@ -206,6 +188,12 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt install -y docker-ce
 usermod -aG docker student
 usermod -aG docker ubuntu
+sudo systemctl start docker
+sudo su - ubuntu -c "minikube start"
 
-kubectl apply -f /root/swapi.yaml
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+#kubectl apply -f /root/swapi.yaml
 echo "done"

@@ -1,11 +1,11 @@
 resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = "${var.name-prefix}-${var.project}"
+  bucket = "${var.name-prefix}-${var.project}-a"
   force_destroy = true
 
   tags = {
     for k, v in merge({
       app_type = "production"
-      Name = "${var.name-prefix}-${var.project}-bucket"
+      Name = "${var.name-prefix}-${var.project}-bucket-a"
     },
     var.default_ec2_tags): k => v
   }

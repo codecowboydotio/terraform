@@ -18,7 +18,7 @@ variable "vpc-a_subnet_1" {
   default = "10.100.1.0/24"
 }
 variable "key_name" {
-  default = "svk_keypair"
+  default = "svk-keypair"
 }
 variable "instance_type_linux_server" {
   default = "m4.2xlarge"
@@ -39,8 +39,8 @@ data "aws_ami" "distro" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04*"]
-    #values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04*"]
+    #values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04*"]
   }
 
   filter {
@@ -62,7 +62,9 @@ data "aws_ami" "windows" {
   filter {
     name   = "name"
     #values = ["Windows_Server-2019-English-Full-HyperV-2022.03.09"]
-    values = ["Windows_Server-2022-English-Core-ContainersLatest-*"]
+    #values = ["Windows_Server-2022-English-Core-Base-2024.01.16"]
+    values = ["Windows_Server-2022-English-Full-Base-2023.12.13"]
+
   }
 
   filter {
@@ -77,4 +79,3 @@ data "aws_ami" "windows" {
   # ami owner
   owners = [ "801119661308" ]
 }
-
