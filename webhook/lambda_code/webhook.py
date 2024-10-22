@@ -28,18 +28,14 @@ def lambda_handler(event, context):
 
     # Let's do a POST to an external API endpoint with data
     # defining the api-endpoint 
-    API_ENDPOINT = "https://webhook-worker.scottvankalken.workers.dev/"
-      
+    #API_ENDPOINT = "https://webhook-worker.scottvankalken.workers.dev/"
+    API_ENDPOINT = "https://chat.googleapis.com/v1/spaces/AAAAfW0Xr2k/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=ja4Dh2xRD8UaRDgwNgH12wGxaeSOF3u4hNML5m4ns-g" 
     # your API key here
     API_KEY = "XXXXXXXXXXXXXXXXX"
       
     # define headers and data portions
     headers = {"content-type":"application/json"}
-    data = {'Category':json_event['category'],
-            'Cloud Provider': json_event['cloud_provider'],
-            'Account Name':json_event['account_name'],
-            'Alert ID':json_event['state']['alert_id'],
-            'Severity':json_event['state']['severity']}
+    data = {'text':json_event}
       
     # sending post request and saving response as response object
     # inside lambda we need to encode the data object as json before sending

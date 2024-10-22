@@ -5,7 +5,7 @@ variable "name-prefix" {
   default = "svk"
 }
 variable "project" {
-  default = "kube"
+  default = "test"
 }
 variable "vm_count" {
   default = 1
@@ -21,7 +21,7 @@ variable "key_name" {
   default = "svk-keypair"
 }
 variable "instance_type_linux_server" {
-  default = "m4.2xlarge"
+  default = "t2.micro"
 }
 variable "linux_server_pkgs" {
   default = ["foo"]
