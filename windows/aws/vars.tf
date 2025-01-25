@@ -14,7 +14,7 @@ variable "vpc-a_subnet_1" {
   default = "10.100.1.0/24"
 }
 variable "key_name" {
-  default = "svk_keypair"
+  default = "svk-keypair"
 }
 variable "instance_type_linux_server" {
   default = "t2.xlarge"
@@ -31,8 +31,9 @@ data "aws_ami" "distro" {
 
   filter {
     name   = "name"
-    values = ["Windows_Server-2022-English-Core-ContainersLatest-*"]
+    #values = ["Windows_Server-2022-English-Core-ContainersLatest-*"]
     #values = ["EC2LaunchV2-Windows_Server-2019-English-Full-ContainersLatest-2022.02.10"]
+    values = ["Windows_Server-2022-English-Full-Base-2024.05.15"]
   }
 
   filter {

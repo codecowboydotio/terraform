@@ -14,8 +14,8 @@ resource "aws_s3_object" "python_lambda" {
 }
 
 
-resource "aws_lambda_function" "orca_webhook" {
-  function_name = "OrcaWebhook"
+resource "aws_lambda_function" "webhook_webhook" {
+  function_name = "SampleWebhook"
 
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.python_lambda.key
@@ -26,17 +26,17 @@ resource "aws_lambda_function" "orca_webhook" {
   source_code_hash = data.archive_file.python_lambda.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
-  layers = ["${aws_lambda_layer_version.orca_webhook_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.webhook_webhook_layer.arn}"]
 }
 
-resource "aws_lambda_layer_version" "orca_webhook_layer" {
+resource "aws_lambda_layer_version" "webhook_webhook_layer" {
   filename = "lib/layer.zip"
   layer_name = "webhook-layer"
   compatible_runtimes = ["python3.7"]
 }
 
-resource "aws_cloudwatch_log_group" "orca_webhook" {
-  name = "/aws/lambda/${aws_lambda_function.orca_webhook.function_name}"
+resource "aws_cloudwatch_log_group" "webhook_webhook" {
+  name = "/aws/lambda/${aws_lambda_function.webhook_webhook.function_name}"
 
   retention_in_days = 30
 }
@@ -66,5 +66,5 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 output "function_name" {
   description = "Name of the Lambda function."
 
-  value = aws_lambda_function.orca_webhook.function_name
+  value = aws_lambda_function.webhook_webhook.function_name
 }
