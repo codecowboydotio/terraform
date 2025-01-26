@@ -15,7 +15,8 @@ resource "aws_s3_object" "python_lambda" {
 
 
 resource "aws_lambda_function" "webhook_webhook" {
-  function_name = "SampleWebhook"
+  #function_name = "SampleWebhook"
+  function_name = "${var.name-prefix}-${var.project}-api-gw"
 
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.python_lambda.key
@@ -65,6 +66,5 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 
 output "function_name" {
   description = "Name of the Lambda function."
-
   value = aws_lambda_function.webhook_webhook.function_name
 }

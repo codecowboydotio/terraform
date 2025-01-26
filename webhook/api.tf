@@ -1,5 +1,6 @@
 resource "aws_api_gateway_rest_api" "webhook" {
-  name = "Sample-Webhook"
+  name = "${var.name-prefix}-${var.project}-api-gw"
+  #name = "Sample-Webhook"
   description = "webhook example"
 
   tags = {

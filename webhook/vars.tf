@@ -1,5 +1,5 @@
 variable "aws_region" {
-  default = "ap-southeast-2"
+  default = "us-east-1"
 }
 variable "name-prefix" {
   default = "svk"

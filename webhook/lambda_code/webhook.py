@@ -26,15 +26,14 @@ def lambda_handler(event, context):
     API_ENDPOINT = "https://httpbin.org/post"
 
     # your API key here
-    API_KEY = "XXXXXXXXXXXXXXXXX"
+    #API_KEY = "XXXXXXXXXXXXXXXXX"
 
     # sending post request and saving response as response object
     # inside lambda we need to encode the data object as json before sending
     http = urllib3.PoolManager()
 
-
-    #data = json.dumps(json_event).encode('utf-8')
     data = json.dumps(json_event).encode('utf8')
+
     headers = {
       'Content-Type': 'application/json'
     }
@@ -46,6 +45,7 @@ def lambda_handler(event, context):
     )
 
     # extracting response text
+    logger.info('data : %s', data)
     logger.info('Response from external API resp : %s', response)
     logger.info('Response from external API resp : %s', response.status)
 
