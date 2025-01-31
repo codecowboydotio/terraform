@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     # Let's do a POST to an external API endpoint with data
     # defining the api-endpoint
     #API_ENDPOINT = "https://httpbin.org/post"
-    API_ENDPOINT = "https://devXXX.service-now.com/api/now/table/incident"
+    API_ENDPOINT = "https://dev242599.service-now.com/api/now/table/incident"
 
     # your API key here
     #API_KEY = "XXXXXXXXXXXXXXXXX"
@@ -34,9 +34,11 @@ def lambda_handler(event, context):
     # inside lambda we need to encode the data object as json before sending
     data = json.dumps(json_event).encode('utf8')
     description = json_event['alert']['name']
+    policy = json_event['alert']['body']
     event_url = json_event['event']['url']
+    long_desc = str(policy + "\n\n" + event_url)
     user = "admin"
-    pwd = "XXX"
+    pwd = "4RhS3=nTfFb^"
 
     headers = {
       'Content-Type':'application/json',
@@ -44,7 +46,7 @@ def lambda_handler(event, context):
     }
     response = requests.post(
       API_ENDPOINT,
-      json = {"short_description": description, "description": event_url, "urgency":"2"},
+      json = {"short_description": description, "description": long_desc, "urgency":"2"},
       auth = (user, pwd),
       headers = headers
     )
